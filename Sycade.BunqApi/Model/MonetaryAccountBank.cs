@@ -2,9 +2,9 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class Id : IBunqEntity
+    public class MonetaryAccountBank : IBunqEntity
     {
         [JsonProperty("id")]
-        public int Value { get; set; }
+        public int Id { get; set; }
     }
 }

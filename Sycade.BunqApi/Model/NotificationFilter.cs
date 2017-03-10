@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class NotificationFilter
+    public class NotificationFilter : IBunqEntity
     {
         [JsonProperty("notification_delivery_method")]
         public string NotificationDeliveryMethod { get; set; }

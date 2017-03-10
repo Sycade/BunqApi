@@ -4,7 +4,10 @@ using Sycade.BunqApi.Exceptions;
 using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
 using Sycade.BunqApi.Requests;
+using Sycade.BunqApi.Responses;
+using Sycade.BunqApi.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -25,6 +28,7 @@ namespace Sycade.BunqApi
         private X509Certificate2 _clientCertificate;
         private string _urlFormatString;
         private string _sessionToken;
+        private User _user;
 
         /// <summary>
         /// Your installation token. Will be set automatically when calling CreateInstallationAsync.
@@ -47,62 +51,80 @@ namespace Sycade.BunqApi
         }
 
 
-        #region DeviceServer
-        public async Task<DeviceServer> CreateDeviceServerAsync(string description, params string[] permittedIpAddresses)
+        #region Device Server
+        public async Task<Id> CreateDeviceServerAsync(string description, params string[] permittedIpAddresses)
         {
             var request = new CreateDeviceServerRequest(description, _apiKey);
 
-            return await DoSignedApiRequest<DeviceServer>(HttpMethod.Post, "device-server", InstallationToken, request);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, "device-server", InstallationToken, request);
+
+            return responseObjects.Cast<Id>().First();
         }
         #endregion
 
         #region Installation
-        public async Task<Installation> CreateInstallationAsync()
+        public async Task<CreateInstallationResponse> CreateInstallationAsync()
         {
             var request = new CreateInstallationRequest(_clientCertificate.GetRSAPublicKey().AsPemString());
 
-            var installation = await DoApiRequest<Installation>(HttpMethod.Post, "installation", request);
-            InstallationToken = installation.Token.Value;
+            var responseObjects = await DoApiRequest(HttpMethod.Post, "installation", request);
+            var response = new CreateInstallationResponse(responseObjects);
 
-            return installation;
+            InstallationToken = response.Token.Value;
+
+            return response;
         }
         #endregion
 
-        #region SessionServer
-        public async Task<SessionServer> CreateSessionServerAsync()
+        #region Monetary Account
+        public async Task<MonetaryAccountBank[]> ListMonetaryAccountsAsync()
+        {
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{_user.Id}/monetary-account", _sessionToken);
+
+            return responseObjects.Cast<MonetaryAccountBank>().ToArray();
+        }
+        #endregion
+
+        #region Session Server
+        public async Task<CreateSessionServerResponse> CreateSessionServerAsync()
         {
             var request = new CreateSessionServerRequest(_apiKey);
 
-            var sessionServer = await DoSignedApiRequest<SessionServer>(HttpMethod.Post, "session-server", InstallationToken, request);
-            _sessionToken = sessionServer.Token.Value;
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, "session-server", InstallationToken, request);
+            var response = new CreateSessionServerResponse(responseObjects);
 
-            return sessionServer;
+            _sessionToken = response.Token.Value;
+            _user = response.User;
+
+            return response;
         }
         #endregion
 
 
-        private async Task<TResponse> DoApiRequest<TResponse>(HttpMethod method, string endpoint, IBunqApiRequest request)
+        private async Task<IBunqEntity[]> DoApiRequest(HttpMethod method, string endpoint, IBunqApiRequest request = null)
         {
-            var httpRequest = CreateRequestMessage(method, endpoint, JsonConvert.SerializeObject(request));
+            var content = request != null ? JsonConvert.SerializeObject(request) : "";
 
-            var responseString = await SendRequestMessageAsync(httpRequest);
+            var httpRequest = CreateRequestMessage(method, endpoint, content);
+            var httpResponse = await SendRequestMessageAsync(httpRequest);
 
-            return await ParseResponseAsync<TResponse>(responseString);
+            return await GetResponseObjectsAsync(httpResponse);
         }
 
-        private async Task<TResponse> DoSignedApiRequest<TResponse>(HttpMethod method, string endpoint, string token, IBunqApiRequest request)
+        private async Task<IBunqEntity[]> DoSignedApiRequest(HttpMethod method, string endpoint, string token, IBunqApiRequest request = null)
         {
-            var httpRequest = CreateSignedRequestMessage(method, endpoint, token, JsonConvert.SerializeObject(request));
+            var content = request != null ? JsonConvert.SerializeObject(request) : "";
 
-            var responseString = await SendRequestMessageAsync(httpRequest);
+            var httpRequest = CreateSignedRequestMessage(method, endpoint, token, content);
+            var httpResponse = await SendRequestMessageAsync(httpRequest);
 
-            return await ParseResponseAsync<TResponse>(responseString);
+            return await GetResponseObjectsAsync(httpResponse);
         }
 
-        private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage request)
+        private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)
         {
             using (var httpClient = new HttpClient())
-                return await httpClient.SendAsync(request);
+                return await httpClient.SendAsync(requestMessage);
         }
 
 
@@ -117,7 +139,8 @@ namespace Sycade.BunqApi
             request.Headers.Add("X-Bunq-Language", "nl_NL");
             request.Headers.Add("X-Bunq-Region", "nl_NL");
 
-            request.Content = new StringContent(content);
+            if (!string.IsNullOrWhiteSpace(content))
+                request.Content = new StringContent(content);
 
             return request;
         }
@@ -151,28 +174,31 @@ namespace Sycade.BunqApi
         }
 
 
-        private async Task<TObject> ParseResponseAsync<TObject>(HttpResponseMessage responseMessage)
+        private async Task<IBunqEntity[]> GetResponseObjectsAsync(HttpResponseMessage responseMessage)
         {
             var responseObject = JObject.Parse(await responseMessage.Content.ReadAsStringAsync());
-            var responseElements = ((JProperty)responseObject.First).Value as JArray;
+            var responseArray = (JArray)((JProperty)responseObject.First).Value;
 
             if (responseMessage.StatusCode != HttpStatusCode.OK)
             {
-                var error = responseElements.First.ToObject<Error>();
+                var error = responseArray.First.ToObject<Error>();
 
                 throw new BunqApiException(error);
             }
 
-            var response = new JObject();
+            var responseObjects = new List<IBunqEntity>();
 
-            foreach (var element in responseElements.Cast<JObject>())
+            foreach (var element in responseArray.Cast<JObject>())
             {
-                var firstProperty = element.First as JProperty;
+                var property = (JProperty)element.First;
+                var propertyValue = (JObject)property.Value;
 
-                response[firstProperty.Name] = firstProperty.Value;
+                var type = ModelFinder.FindByName(property.Name);
+
+                responseObjects.Add((IBunqEntity)propertyValue.ToObject(type));
             }
 
-            return response.ToObject<TObject>();
+            return responseObjects.ToArray();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class Alias
+    public class Alias : IBunqEntity
     {
         [JsonProperty("type")]
         public string Type { get; set; }

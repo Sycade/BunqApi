@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class Address
+    public class Address : IBunqEntity
     {
         [JsonProperty("street")]
         public string Street { get; set; }

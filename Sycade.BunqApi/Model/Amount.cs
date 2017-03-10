@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class Amount
+    public class Amount : IBunqEntity
     {
         [JsonProperty("currency")]
         public string Currency { get; set; }

@@ -3,7 +3,7 @@ using System;
 
 namespace Sycade.BunqApi.Model
 {
-    public class Avatar
+    public class Avatar : IBunqEntity
     {
         [JsonProperty("uuid")]
         public Guid Uuid { get; set; }

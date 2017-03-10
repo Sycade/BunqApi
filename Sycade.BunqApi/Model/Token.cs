@@ -3,7 +3,7 @@ using System;
 
 namespace Sycade.BunqApi.Model
 {
-    public class Token
+    public class Token : IBunqEntity
     {
         [JsonProperty("id")]
         public int Id { get; set; }

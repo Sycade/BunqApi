@@ -46,17 +46,21 @@
   <ItemGroup>
     <Compile Include="BunqApiClient.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
+    <Compile Include="Model\Attachment.cs" />
+    <Compile Include="Model\IBunqEntity.cs" />
+    <Compile Include="Model\MonetaryAccountBank.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Alias.cs" />
     <Compile Include="Model\Amount.cs" />
     <Compile Include="Model\Avatar.cs" />
-    <Compile Include="Model\DeviceServer.cs" />
     <Compile Include="Extensions\RSAExtensions.cs" />
     <Compile Include="Model\DirectorAlias.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\Id.cs" />
     <Compile Include="Model\Image.cs" />
-    <Compile Include="Model\Installation.cs" />
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\UserPerson.cs" />
+    <Compile Include="Responses\CreateInstallationResponse.cs" />
     <Compile Include="Model\NotificationFilter.cs" />
     <Compile Include="Model\ServerPublicKey.cs" />
     <Compile Include="Model\SessionServer.cs" />
@@ -68,7 +72,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\CreateSessionServerRequest.cs" />
     <Compile Include="Requests\IBunqApiRequest.cs" />
+    <Compile Include="Responses\CreateSessionServerResponse.cs" />
     <Compile Include="Utilities\BigEndianBitConverter.cs" />
+    <Compile Include="Utilities\ModelFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
