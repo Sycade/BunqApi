@@ -14,7 +14,6 @@ namespace Sycade.BunqApi.Model
 
         [JsonProperty("alias")]
         public Alias[] Aliases { get; set; }
-
         [JsonProperty("avatar")]
         public Avatar Avatar { get; set; }
 

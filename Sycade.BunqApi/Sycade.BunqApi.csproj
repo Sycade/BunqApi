@@ -58,6 +58,8 @@
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\Id.cs" />
     <Compile Include="Model\Image.cs" />
+    <Compile Include="Model\MonetaryAccountProfile.cs" />
+    <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserPerson.cs" />
     <Compile Include="Responses\CreateInstallationResponse.cs" />
