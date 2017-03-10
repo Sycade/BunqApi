@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sycade.BunqApi", "Sycade.BunqApiClient\Sycade.BunqApi.csproj", "{404330AC-8922-40FC-BA28-C5D0326F3AE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sycade.BunqApi", "Sycade.BunqApi\Sycade.BunqApi.csproj", "{404330AC-8922-40FC-BA28-C5D0326F3AE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{FA8567EA-EBC5-4F87-8409-E9E99EB4C279}"
 EndProject
