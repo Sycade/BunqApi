@@ -77,6 +77,13 @@ namespace Sycade.BunqApi
         #endregion
 
         #region Monetary Account
+        public async Task<MonetaryAccountBank> GetMonetaryAccountAsync(int monetaryAccountId)
+        {
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{_user.Id}/monetary-account/{monetaryAccountId}", _sessionToken);
+
+            return responseObjects.Cast<MonetaryAccountBank>().First();
+        }
+
         public async Task<MonetaryAccountBank[]> ListMonetaryAccountsAsync()
         {
             var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{_user.Id}/monetary-account", _sessionToken);
