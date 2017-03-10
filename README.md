@@ -9,6 +9,9 @@ To use the .NET Bunq API client, you need:
 ## Example
 
 ```csharp
+var clientCertificate = new X509Certificate2("your-certificate.pfx", "your-pvk-password");
+var useSandbox = true;
+
 var bunq = new BunqApiClient("your-api-key", clientCertificate, useSandbox);
 
 // Link your API key to this IP address
