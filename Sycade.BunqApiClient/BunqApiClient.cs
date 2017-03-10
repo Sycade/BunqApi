@@ -24,11 +24,13 @@ namespace Sycade.BunqApi
         private string _apiKey;
         private X509Certificate2 _clientCertificate;
         private string _urlFormatString;
+        private string _sessionToken;
 
         /// <summary>
         /// Your installation token. Will be set automatically when calling CreateInstallationAsync.
         /// </summary>
         public string InstallationToken { get; set; }
+
 
         public BunqApiClient(string apiKey, string installationToken, X509Certificate2 clientCertificate, bool useSandbox)
         {
@@ -62,7 +64,6 @@ namespace Sycade.BunqApi
             var response = await DoJsonRequest(HttpMethod.Post, "installation", request);
 
             var installation = response.ToObject<Installation>();
-
             InstallationToken = installation.Token.Value;
 
             return installation;
@@ -75,7 +76,10 @@ namespace Sycade.BunqApi
             var request = new CreateSessionServerRequest(_apiKey);
             var response = await DoSignedJsonRequest(HttpMethod.Post, "session-server", InstallationToken, request);
 
-            return response.ToObject<SessionServer>();
+            var sessionServer = response.ToObject<SessionServer>();
+            _sessionToken = sessionServer.Token.Value;
+
+            return sessionServer;
         }
         #endregion
 

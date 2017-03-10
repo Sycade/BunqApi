@@ -46,15 +46,22 @@
   <ItemGroup>
     <Compile Include="BunqApiClient.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
+    <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Alias.cs" />
+    <Compile Include="Model\Amount.cs" />
+    <Compile Include="Model\Avatar.cs" />
     <Compile Include="Model\DeviceServer.cs" />
     <Compile Include="Extensions\RSAExtensions.cs" />
+    <Compile Include="Model\DirectorAlias.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\Id.cs" />
+    <Compile Include="Model\Image.cs" />
     <Compile Include="Model\Installation.cs" />
+    <Compile Include="Model\NotificationFilter.cs" />
     <Compile Include="Model\ServerPublicKey.cs" />
     <Compile Include="Model\SessionServer.cs" />
     <Compile Include="Model\Token.cs" />
+    <Compile Include="Model\UltimateBeneficialOwner.cs" />
     <Compile Include="Model\UserCompany.cs" />
     <Compile Include="Requests\CreateDeviceServerRequest.cs" />
     <Compile Include="Requests\CreateInstallationRequest.cs" />
