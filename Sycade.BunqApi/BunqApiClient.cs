@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Sycade.BunqApi.Converters;
 using Sycade.BunqApi.Exceptions;
 using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
@@ -26,8 +27,9 @@ namespace Sycade.BunqApi
 
         private string _apiKey;
         private X509Certificate2 _clientCertificate;
-        private string _urlFormatString;
         private string _sessionToken;
+        private string _urlFormatString;
+        
 
         /// <summary>
         /// Your installation token. Will be set automatically when calling <see cref="CreateInstallationAsync"/>.
@@ -99,7 +101,7 @@ namespace Sycade.BunqApi
         {
             var request = new CreatePaymentRequest(amount, toAccount, description);
 
-            var responseObjects =await DoSignedApiRequest(HttpMethod.Post, $"user/{User.Id}/monetary-account/{fromAccountId}/payment", _sessionToken, request);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, $"user/{User.Id}/monetary-account/{fromAccountId}/payment", _sessionToken, request);
 
             return responseObjects.Cast<Id>().First();
         }
@@ -219,6 +221,19 @@ namespace Sycade.BunqApi
             }
 
             return responseObjects.ToArray();
+        }
+
+        private JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter>
+                {
+                    new CurrencyConverter()
+                }
+            };
+
+            return settings;
         }
     }
 }

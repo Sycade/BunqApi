@@ -45,9 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BunqApiClient.cs" />
+    <Compile Include="Converters\CurrencyConverter.cs" />
     <Compile Include="Converters\AmountValueConverter.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
     <Compile Include="Model\Attachment.cs" />
+    <Compile Include="Model\Currency.cs" />
     <Compile Include="Model\IBunqEntity.cs" />
     <Compile Include="Model\MonetaryAccountBank.cs" />
     <Compile Include="Model\Address.cs" />

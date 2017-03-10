@@ -6,7 +6,8 @@ namespace Sycade.BunqApi.Model
     public class Amount : IBunqEntity
     {
         [JsonProperty("currency")]
-        public string Currency { get; set; }
+        [JsonConverter(typeof(CurrencyConverter))]
+        public Currency Currency { get; set; }
 
         [JsonProperty("value")]
         [JsonConverter(typeof(AmountValueConverter))]
@@ -14,7 +15,7 @@ namespace Sycade.BunqApi.Model
 
         internal Amount() { }
 
-        public Amount(string currency, decimal value)
+        public Amount(Currency currency, decimal value)
         {
             Currency = currency;
             Value = value;
