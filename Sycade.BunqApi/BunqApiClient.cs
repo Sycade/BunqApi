@@ -94,6 +94,17 @@ namespace Sycade.BunqApi
         }
         #endregion
 
+        #region Payment
+        public async Task<Id> CreatePaymentAsync(int fromAccountId, Alias toAccount, Amount amount, string description)
+        {
+            var request = new CreatePaymentRequest(amount, toAccount, description);
+
+            var responseObjects =await DoSignedApiRequest(HttpMethod.Post, $"user/{User.Id}/monetary-account/{fromAccountId}/payment", _sessionToken, request);
+
+            return responseObjects.Cast<Id>().First();
+        }
+        #endregion
+
         #region Session Server
         public async Task<CreateSessionServerResponse> CreateSessionServerAsync()
         {

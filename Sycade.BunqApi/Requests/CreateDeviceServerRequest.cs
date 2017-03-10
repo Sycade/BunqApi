@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Requests
 {
-    public class CreateDeviceServerRequest : IBunqApiRequest
+    class CreateDeviceServerRequest : IBunqApiRequest
     {
         [JsonProperty("description")]
         public string Description { get; }

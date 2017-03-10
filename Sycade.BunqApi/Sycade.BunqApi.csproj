@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BunqApiClient.cs" />
+    <Compile Include="Converters\AmountValueConverter.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\IBunqEntity.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserPerson.cs" />
+    <Compile Include="Requests\CreatePaymentRequest.cs" />
     <Compile Include="Responses\CreateInstallationResponse.cs" />
     <Compile Include="Model\NotificationFilter.cs" />
     <Compile Include="Model\ServerPublicKey.cs" />

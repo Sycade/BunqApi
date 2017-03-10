@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sycade.BunqApi.Converters;
 
 namespace Sycade.BunqApi.Model
 {
@@ -6,7 +7,17 @@ namespace Sycade.BunqApi.Model
     {
         [JsonProperty("currency")]
         public string Currency { get; set; }
+
         [JsonProperty("value")]
-        public string Value { get; set; }
+        [JsonConverter(typeof(AmountValueConverter))]
+        public decimal Value { get; set; }
+
+        internal Amount() { }
+
+        public Amount(string currency, decimal value)
+        {
+            Currency = currency;
+            Value = value;
+        }
     }
 }

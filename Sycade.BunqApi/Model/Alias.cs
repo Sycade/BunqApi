@@ -10,5 +10,13 @@ namespace Sycade.BunqApi.Model
         public string Value { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        internal Alias() { }
+
+        public Alias(string type, string value)
+        {
+            Type = type;
+            Value = value;
+        }
     }
 }
