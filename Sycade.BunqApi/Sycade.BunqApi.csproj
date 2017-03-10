@@ -65,7 +65,6 @@
     <Compile Include="Responses\CreateInstallationResponse.cs" />
     <Compile Include="Model\NotificationFilter.cs" />
     <Compile Include="Model\ServerPublicKey.cs" />
-    <Compile Include="Model\SessionServer.cs" />
     <Compile Include="Model\Token.cs" />
     <Compile Include="Model\UltimateBeneficialOwner.cs" />
     <Compile Include="Model\UserCompany.cs" />
