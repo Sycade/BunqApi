@@ -67,6 +67,7 @@
     <Compile Include="Requests\CreateInstallationRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\CreateSessionServerRequest.cs" />
+    <Compile Include="Requests\IBunqApiRequest.cs" />
     <Compile Include="Utilities\BigEndianBitConverter.cs" />
   </ItemGroup>
   <ItemGroup>

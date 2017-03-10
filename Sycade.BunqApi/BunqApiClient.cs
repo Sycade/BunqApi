@@ -19,7 +19,7 @@ namespace Sycade.BunqApi
     {
         private const string BunqApiUrlFormatString = "https://api.bunq.com/v{0}/{1}";
         private const string BunqSandboxApiUrlFormatString = "https://sandbox.public.api.bunq.com/v{0}/{1}";
-        private const int BunqApiVersion = 1;
+        private const int ApiVersion = 1;
 
         private string _apiKey;
         private X509Certificate2 _clientCertificate;
@@ -51,9 +51,8 @@ namespace Sycade.BunqApi
         public async Task<DeviceServer> CreateDeviceServerAsync(string description, params string[] permittedIpAddresses)
         {
             var request = new CreateDeviceServerRequest(description, _apiKey);
-            var response = await DoSignedJsonRequest(HttpMethod.Post, "device-server", InstallationToken, request);
 
-            return response.ToObject<DeviceServer>();
+            return await DoSignedApiRequest<DeviceServer>(HttpMethod.Post, "device-server", InstallationToken, request);
         }
         #endregion
 
@@ -61,9 +60,8 @@ namespace Sycade.BunqApi
         public async Task<Installation> CreateInstallationAsync()
         {
             var request = new CreateInstallationRequest(_clientCertificate.GetRSAPublicKey().AsPemString());
-            var response = await DoJsonRequest(HttpMethod.Post, "installation", request);
 
-            var installation = response.ToObject<Installation>();
+            var installation = await DoApiRequest<Installation>(HttpMethod.Post, "installation", request);
             InstallationToken = installation.Token.Value;
 
             return installation;
@@ -74,9 +72,8 @@ namespace Sycade.BunqApi
         public async Task<SessionServer> CreateSessionServerAsync()
         {
             var request = new CreateSessionServerRequest(_apiKey);
-            var response = await DoSignedJsonRequest(HttpMethod.Post, "session-server", InstallationToken, request);
 
-            var sessionServer = response.ToObject<SessionServer>();
+            var sessionServer = await DoSignedApiRequest<SessionServer>(HttpMethod.Post, "session-server", InstallationToken, request);
             _sessionToken = sessionServer.Token.Value;
 
             return sessionServer;
@@ -84,25 +81,25 @@ namespace Sycade.BunqApi
         #endregion
 
 
-        private async Task<JObject> DoJsonRequest<TRequest>(HttpMethod method, string endpoint, TRequest request)
+        private async Task<TResponse> DoApiRequest<TResponse>(HttpMethod method, string endpoint, IBunqApiRequest request)
         {
             var httpRequest = CreateRequestMessage(method, endpoint, JsonConvert.SerializeObject(request));
 
-            var responseString = await DoHttpRequest(httpRequest);
+            var responseString = await SendRequestMessageAsync(httpRequest);
 
-            return await FlattenResponseObjectAsync(responseString);
+            return await ParseResponseAsync<TResponse>(responseString);
         }
 
-        private async Task<JObject> DoSignedJsonRequest<TRequest>(HttpMethod method, string endpoint, string token, TRequest request)
+        private async Task<TResponse> DoSignedApiRequest<TResponse>(HttpMethod method, string endpoint, string token, IBunqApiRequest request)
         {
             var httpRequest = CreateSignedRequestMessage(method, endpoint, token, JsonConvert.SerializeObject(request));
 
-            var responseString = await DoHttpRequest(httpRequest);
+            var responseString = await SendRequestMessageAsync(httpRequest);
 
-            return await FlattenResponseObjectAsync(responseString);
+            return await ParseResponseAsync<TResponse>(responseString);
         }
 
-        private async Task<HttpResponseMessage> DoHttpRequest(HttpRequestMessage request)
+        private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage request)
         {
             using (var httpClient = new HttpClient())
                 return await httpClient.SendAsync(request);
@@ -111,7 +108,7 @@ namespace Sycade.BunqApi
 
         private HttpRequestMessage CreateRequestMessage(HttpMethod method, string endpoint, string content)
         {
-            var request = new HttpRequestMessage(method, string.Format(_urlFormatString, BunqApiVersion, endpoint));
+            var request = new HttpRequestMessage(method, string.Format(_urlFormatString, ApiVersion, endpoint));
 
             request.Headers.Add("Cache-Control", "no-cache");
             request.Headers.Add("User-Agent", "sycade.bunq/0.0.1");
@@ -130,16 +127,16 @@ namespace Sycade.BunqApi
             var request = CreateRequestMessage(method, endpoint, content);
 
             request.Headers.Add("X-Bunq-Client-Authentication", token);
-            SignRequest(request, endpoint, content);
+            request.Headers.Add("X-Bunq-Client-Signature", GetClientSignatureHeader(request, endpoint, content));
 
             return request;
         }
 
-        private void SignRequest(HttpRequestMessage request, string endpoint, string content)
+        private string GetClientSignatureHeader(HttpRequestMessage request, string endpoint, string content)
         {
             var builder = new StringBuilder();
 
-            builder.AppendFormat("{0} /v{1}/{2}\n", request.Method.Method, BunqApiVersion, endpoint);
+            builder.AppendFormat("{0} /v{1}/{2}\n", request.Method.Method, ApiVersion, endpoint);
 
             foreach (var header in request.Headers.Where(h => h.Key.StartsWith("X-Bunq-") || h.Key == "Cache-Control" || h.Key == "User-Agent").OrderBy(h => h.Key))
                 builder.AppendFormat("{0}: {1}\n", header.Key, header.Value.First());
@@ -147,12 +144,14 @@ namespace Sycade.BunqApi
             builder.Append("\n");
             builder.Append(content);
 
-            var signatureData = _clientCertificate.GetRSAPrivateKey().SignData(Encoding.UTF8.GetBytes(builder.ToString()), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            var builderBytes = Encoding.UTF8.GetBytes(builder.ToString());
+            var signatureData = _clientCertificate.GetRSAPrivateKey().SignData(builderBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 
-            request.Headers.Add("X-Bunq-Client-Signature", Convert.ToBase64String(signatureData));
+            return Convert.ToBase64String(signatureData);
         }
 
-        private async Task<JObject> FlattenResponseObjectAsync(HttpResponseMessage responseMessage)
+
+        private async Task<TObject> ParseResponseAsync<TObject>(HttpResponseMessage responseMessage)
         {
             var responseObject = JObject.Parse(await responseMessage.Content.ReadAsStringAsync());
             var responseElements = ((JProperty)responseObject.First).Value as JArray;
@@ -173,7 +172,7 @@ namespace Sycade.BunqApi
                 response[firstProperty.Name] = firstProperty.Value;
             }
 
-            return response;
+            return response.ToObject<TObject>();
         }
     }
 }

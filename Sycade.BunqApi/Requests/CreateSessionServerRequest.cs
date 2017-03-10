@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Requests
 {
-    public class CreateSessionServerRequest
+    public class CreateSessionServerRequest : IBunqApiRequest
     {
         [JsonProperty("secret")]
         public string Secret { get; }
