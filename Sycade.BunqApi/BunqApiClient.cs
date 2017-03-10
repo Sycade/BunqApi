@@ -28,13 +28,15 @@ namespace Sycade.BunqApi
         private X509Certificate2 _clientCertificate;
         private string _urlFormatString;
         private string _sessionToken;
-        private User _user;
 
         /// <summary>
-        /// Your installation token. Will be set automatically when calling CreateInstallationAsync.
+        /// Your installation token. Will be set automatically when calling <see cref="CreateInstallationAsync"/>.
         /// </summary>
         public string InstallationToken { get; set; }
-
+        /// <summary>
+        /// The logged in user. Will be set automatically when calling <see cref="CreateSessionServerAsync"/>.
+        /// </summary>
+        public User User { get; private set; }
 
         public BunqApiClient(string apiKey, string installationToken, X509Certificate2 clientCertificate, bool useSandbox)
         {
@@ -77,16 +79,16 @@ namespace Sycade.BunqApi
         #endregion
 
         #region Monetary Account
-        public async Task<MonetaryAccountBank> GetMonetaryAccountAsync(int monetaryAccountId)
+        public async Task<MonetaryAccountBank> GetMonetaryAccountBankAsync(int monetaryAccountId)
         {
-            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{_user.Id}/monetary-account/{monetaryAccountId}", _sessionToken);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{User.Id}/monetary-account-bank/{monetaryAccountId}", _sessionToken);
 
             return responseObjects.Cast<MonetaryAccountBank>().First();
         }
 
-        public async Task<MonetaryAccountBank[]> ListMonetaryAccountsAsync()
+        public async Task<MonetaryAccountBank[]> ListMonetaryAccountBanksAsync()
         {
-            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{_user.Id}/monetary-account", _sessionToken);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{User.Id}/monetary-account-bank", _sessionToken);
 
             return responseObjects.Cast<MonetaryAccountBank>().ToArray();
         }
@@ -101,7 +103,7 @@ namespace Sycade.BunqApi
             var response = new CreateSessionServerResponse(responseObjects);
 
             _sessionToken = response.Token.Value;
-            _user = response.User;
+            User = response.User;
 
             return response;
         }
