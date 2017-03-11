@@ -1,5 +1,5 @@
 # Sycade.BunqApi
-A .NET bunq API client by Sycade.
+A .NET bunq API client written in C# by Sycade.
 
 ## Requirements
 To use the .NET bunq API client, you need:
