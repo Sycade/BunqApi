@@ -28,6 +28,7 @@ namespace Sycade.BunqApi
 
         internal string ApiKey { get; }
         internal X509Certificate2 ClientCertificate { get; }
+        internal RSA ServerPublicKey { get; }
 
         public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
         {
@@ -40,22 +41,29 @@ namespace Sycade.BunqApi
 
         internal async Task<IBunqEntity[]> DoApiRequestAsync(HttpMethod method, string endpoint, IBunqApiRequest request = null)
         {
-            var content = request != null ? JsonConvert.SerializeObject(request) : "";
+            var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
+            var requestMessage = CreateRequestMessage(method, endpoint, requestContent);
 
-            var httpRequest = CreateRequestMessage(method, endpoint, content);
-            var httpResponse = await SendRequestMessageAsync(httpRequest);
+            var responseMessage = await SendRequestMessageAsync(requestMessage);
+            var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-            return await GetResponseObjectsAsync(httpResponse);
+            return await GetResponseObjectsAsync(responseMessage, responseContent);
         }
 
         internal async Task<IBunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
         {
-            var content = request != null ? JsonConvert.SerializeObject(request) : "";
+            //if (ServerPublicKey == null)
+            //    throw new BunqApiException("Server public key was not set.");
 
-            var httpRequest = CreateSignedRequestMessage(method, endpoint, token, content);
-            var httpResponse = await SendRequestMessageAsync(httpRequest);
+            var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
+            var requestMessage = CreateSignedRequestMessage(method, endpoint, token, requestContent);
 
-            return await GetResponseObjectsAsync(httpResponse);
+            var responseMessage = await SendRequestMessageAsync(requestMessage);
+            var responseContent = await responseMessage.Content.ReadAsStringAsync();
+
+            //VerifyResponse(responseMessage, responseContent);
+
+            return await GetResponseObjectsAsync(responseMessage, responseContent);
         }
 
         private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)
@@ -112,7 +120,7 @@ namespace Sycade.BunqApi
             requestMessage.Headers.Add(ClientSignatureHeaderName, Convert.ToBase64String(signatureData));
         }
 
-        private void VerifyResponse(RSA serverPublicKey, HttpResponseMessage responseMessage, string content)
+        private void VerifyResponse(HttpResponseMessage responseMessage, string content)
         {
             var clientSignatureHeader = responseMessage.Headers.FirstOrDefault(h => h.Key == ClientSignatureHeaderName).Value.FirstOrDefault();
 
@@ -133,13 +141,13 @@ namespace Sycade.BunqApi
 
             var builderBytes = Encoding.UTF8.GetBytes(builder.ToString());
 
-            if (!serverPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
+            if (!ServerPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
                 throw new BunqApiException("Server sent an invalid response. Could not verify signature.");
 
         }
 
 
-        private async Task<IBunqEntity[]> GetResponseObjectsAsync(HttpResponseMessage responseMessage)
+        private async Task<IBunqEntity[]> GetResponseObjectsAsync(HttpResponseMessage responseMessage, string content)
         {
             var responseObject = JObject.Parse(await responseMessage.Content.ReadAsStringAsync());
             var responseArray = (JArray)((JProperty)responseObject.First).Value;

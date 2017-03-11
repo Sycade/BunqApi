@@ -1,24 +1,26 @@
 ﻿using Newtonsoft.Json;
-using Sycade.BunqApi.Model;
 using System;
+using System.Globalization;
 
 namespace Sycade.BunqApi.Converters
 {
-    class CurrencyConverter : JsonConverter
+    class DecimalToStringConverter : JsonConverter
     {
+        private CultureInfo _usCultureInfo = new CultureInfo("en-US");
+
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Currency);
+            return objectType == typeof(decimal);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return (Currency)Enum.Parse(typeof(Currency), (string)reader.Value);
+            return decimal.Parse((string)reader.Value, _usCultureInfo);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteValue(value.ToString());
+            writer.WriteValue(Math.Round((decimal)value, 2, MidpointRounding.AwayFromZero).ToString(_usCultureInfo));
         }
     }
 }

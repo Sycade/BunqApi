@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
+using Sycade.BunqApi.Converters;
 
 namespace Sycade.BunqApi.Model
 {
     public class Alias : IBunqEntity
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        [JsonConverter(typeof(EnumToStringConverter))]
+        public AliasType Type { get; set; }
         [JsonProperty("value")]
         public string Value { get; set; }
         [JsonProperty("name")]
@@ -13,7 +15,7 @@ namespace Sycade.BunqApi.Model
 
         internal Alias() { }
 
-        public Alias(string type, string value)
+        public Alias(AliasType type, string value)
         {
             Type = type;
             Value = value;

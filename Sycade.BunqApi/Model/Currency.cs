@@ -5,6 +5,7 @@
         CHF,
         DKK,
         EUR,
+        GBP,
         NOK,
         SEK,
         USD,

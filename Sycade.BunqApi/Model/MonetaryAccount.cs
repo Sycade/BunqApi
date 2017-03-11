@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sycade.BunqApi.Converters;
 using System;
 
 namespace Sycade.BunqApi.Model
@@ -23,7 +24,8 @@ namespace Sycade.BunqApi.Model
         [JsonProperty("country")]
         public string Country { get; set; }
         [JsonProperty("currency")]
-        public string Currency { get; set; }
+        [JsonConverter(typeof(EnumToStringConverter))]
+        public Currency Currency { get; set; }
 
         [JsonProperty("daily_limit")]
         public Amount DailyLimit { get; set; }
