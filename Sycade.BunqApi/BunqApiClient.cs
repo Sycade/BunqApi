@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sycade.BunqApi.Exceptions;
+using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
 using Sycade.BunqApi.Requests;
 using Sycade.BunqApi.Utilities;
@@ -25,18 +26,24 @@ namespace Sycade.BunqApi
         private const string ClientSignatureHeaderName = "X-Bunq-Client-Signature";
         private const string ServerSignatureHeaderName = "X-Bunq-Server-Signature";
 
+        private RSA _serverPublicKey;
         private string _urlFormatString;
 
         internal string ApiKey { get; }
         internal X509Certificate2 ClientCertificate { get; }
-        internal RSA ServerPublicKey { get; }
 
         public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
         {
             ApiKey = apiKey;
             ClientCertificate = clientCertificate;
-
+   
             _urlFormatString = useSandbox ? BunqSandboxApiUrlFormatString : BunqApiUrlFormatString;
+        }
+
+
+        public void SetServerPublicKey(ServerPublicKey serverPublicKey)
+        {
+            _serverPublicKey = RSAExtensions.FromPemString(serverPublicKey.Value);
         }
 
 
@@ -53,8 +60,8 @@ namespace Sycade.BunqApi
 
         internal async Task<IBunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
         {
-            //if (ServerPublicKey == null)
-            //    throw new BunqApiException("Server public key was not set.");
+            if (_serverPublicKey == null)
+                throw new BunqApiException("Server public key was not set.");
 
             var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
             var requestMessage = CreateSignedRequestMessage(method, endpoint, token, requestContent);
@@ -62,7 +69,7 @@ namespace Sycade.BunqApi
             var responseMessage = await SendRequestMessageAsync(requestMessage);
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-            //VerifyResponse(responseMessage, responseContent);
+            VerifyResponse(responseMessage, responseContent);
 
             return await GetResponseObjectsAsync(responseMessage, responseContent);
         }
@@ -130,7 +137,7 @@ namespace Sycade.BunqApi
 
             var builder = new StringBuilder();
 
-            builder.AppendFormat("{0}\n", responseMessage.StatusCode);
+            builder.AppendFormat("{0}\n", (int)responseMessage.StatusCode);
 
             foreach (var header in responseMessage.Headers.Where(h => h.Key.StartsWith("X-Bunq-") && h.Key != ServerSignatureHeaderName).OrderBy(h => h.Key))
                 builder.AppendFormat("{0}: {1}\n", header.Key, header.Value.First());
@@ -141,7 +148,7 @@ namespace Sycade.BunqApi
             var builderBytes = Encoding.UTF8.GetBytes(builder.ToString());
             var serverSignature = Convert.FromBase64String(serverSignatureHeader);
 
-            if (!ServerPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
+            if (!_serverPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
                 throw new BunqApiException("Server sent an invalid response. Could not verify signature.");
         }
 

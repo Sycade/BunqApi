@@ -15,7 +15,7 @@ namespace Sycade.BunqApi.Endpoints
 
         public async Task<CreateInstallationResponse> CreateAsync()
         {
-            var request = new CreateInstallationRequest(ApiClient.ClientCertificate.GetRSAPublicKey().AsPemString());
+            var request = new CreateInstallationRequest(ApiClient.ClientCertificate.GetRSAPublicKey().ToPemString());
 
             var responseObjects = await ApiClient.DoApiRequestAsync(HttpMethod.Post, "installation", request);
             var response = new CreateInstallationResponse(responseObjects);

@@ -12,7 +12,7 @@ namespace Sycade.BunqApi.Extensions
         private const int ExponentLength = 3;
         private const int PemLineLength = 64;
 
-        public static string AsPemString(this RSA rsa)
+        public static string ToPemString(this RSA rsa)
         {
             var data = GeneratePemData(rsa);
 
