@@ -1,10 +1,10 @@
-# BunqApi
-.NET Bunq API client by Sycade
+# Sycade.BunqApi
+A .NET bunq API client by Sycade.
 
 ## Requirements
-To use the .NET Bunq API client, you need:
-- an API key (created in the Bunq Android (Sandbox)/iOS app;
-- a client certificate (can be self-signed);
+To use the .NET bunq API client, you need:
+- an API key (created in the Bunq Android (Sandbox) or iOS app;
+- a PKCS #12 (.pfx) file with exportable private key (can be self-signed) for API request signing.
 
 ## Example
 
@@ -19,10 +19,10 @@ var installation = await new InstallationEndpoint(bunq).CreateAsync();
 var deviceServer = await new DeviceServerEndpoint(bunq).CreateAsync("My First DeviceServer", installation.Token);
 var sessionServer = await new SessionServerEndpoint(bunq).CreateAsync(installation.Token);
 
-// Get all monetary accounts of type Bank from the current User
+// Get all monetary accounts for the User
 var accounts = await new MonetaryAccountEndpoint(bunq).ListAsync(sessionServer.User, sessionServer.Token);
 
-// Pay 25 euros from the first to the second bank account in your user account
+// Pay 25 euros from the first to the second bank account in the user account
 var paymentId = await new PaymentEndpoint(bunq).CreateAsync(sessionServer.User, accounts[0].Id,
     accounts[1].Aliases[0], new Amount(Currency.EUR, 25m), "My First Payment", sessionServer.Token);
 ```
