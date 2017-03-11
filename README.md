@@ -42,4 +42,5 @@ var bunq = new BunqApiClient("your-api-key", clientCertificate, useSandbox);
 bunq.SetServerPublicKey(serverPublicKey);
 
 var sessionServer = await new SessionServerEndpoint(bunq).CreateAsync(installationToken);
+// ... use your active session
 ```
