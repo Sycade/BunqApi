@@ -172,7 +172,7 @@ namespace Sycade.BunqApi
                 var property = (JProperty)element.First;
                 var propertyValue = (JObject)property.Value;
 
-                var type = ModelFinder.FindByName(property.Name);
+                var type = EntityTypeCollection.FindByName(property.Name);
 
                 responseObjects.Add((IBunqEntity)propertyValue.ToObject(type));
             }

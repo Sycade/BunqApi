@@ -87,7 +87,7 @@
     <Compile Include="Requests\IBunqApiRequest.cs" />
     <Compile Include="Responses\CreateSessionServerResponse.cs" />
     <Compile Include="Utilities\BigEndianBitConverter.cs" />
-    <Compile Include="Utilities\ModelFinder.cs" />
+    <Compile Include="Utilities\EntityTypeCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
