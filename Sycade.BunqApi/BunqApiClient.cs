@@ -112,7 +112,7 @@ namespace Sycade.BunqApi
             requestMessage.Headers.Add(ClientSignatureHeaderName, Convert.ToBase64String(signatureData));
         }
 
-        public void VerifyResponse(RSA serverPublicKey, HttpResponseMessage responseMessage, string content)
+        private void VerifyResponse(RSA serverPublicKey, HttpResponseMessage responseMessage, string content)
         {
             var clientSignatureHeader = responseMessage.Headers.FirstOrDefault(h => h.Key == ClientSignatureHeaderName).Value.FirstOrDefault();
 
