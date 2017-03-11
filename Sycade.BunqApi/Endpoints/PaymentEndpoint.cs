@@ -12,9 +12,9 @@ namespace Sycade.BunqApi.Endpoints
             : base(apiClient) { }
 
 
-        public async Task<Id> CreateAsync(User user, int fromAccountId, Alias toAccount, Amount amount, string description, Token sessionToken)
+        public async Task<Id> CreateAsync(int fromAccountId, Alias to, Amount amount, string description, User user, Token sessionToken)
         {
-            var request = new CreatePaymentRequest(amount, toAccount, description);
+            var request = new CreatePaymentRequest(amount, to, description);
 
             var responseObjects = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, $"user/{user.Id}/monetary-account/{fromAccountId}/payment", sessionToken, request);
 
