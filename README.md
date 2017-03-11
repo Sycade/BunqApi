@@ -1,10 +1,10 @@
-# BunqApi
-.NET Bunq API client by Sycade
+# Sycade.BunqApi
+A .NET Bunq API client by Sycade.
 
 ## Requirements
 To use the .NET Bunq API client, you need:
-- an API key (created in the Bunq Android (Sandbox)/iOS app;
-- a client certificate (can be self-signed);
+- an API key (created in the Bunq Android (Sandbox) or iOS app;
+- a PKCS #12 (.pfx) file with exportable private key (can be self-signed) for API request signing.
 
 ## Example
 
