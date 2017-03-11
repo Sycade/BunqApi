@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Sycade.BunqApi.Converters;
 using System;
 
 namespace Sycade.BunqApi.Model
@@ -18,9 +19,11 @@ namespace Sycade.BunqApi.Model
         public Avatar Avatar { get; set; }
 
         [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonConverter(typeof(EnumToStringConverter))]
+        public UserStatus Status { get; set; }
         [JsonProperty("sub_status")]
-        public string SubStatus { get; set; }
+        [JsonConverter(typeof(EnumToStringConverter))]
+        public UserSubStatus SubStatus { get; set; }
 
         [JsonProperty("public_uuid")]
         public Guid PublicUuid { get; set; }

@@ -39,9 +39,11 @@ namespace Sycade.BunqApi.Model
         public Guid PublicUuid { get; set; }
 
         [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonConverter(typeof(EnumToStringConverter))]
+        public MonetaryAccountStatus Status { get; set; }
         [JsonProperty("sub_status")]
-        public string SubStatus { get; set; }
+        [JsonConverter(typeof(EnumToStringConverter))]
+        public MonetaryAccountSubStatus SubStatus { get; set; }
 
         [JsonProperty("timezone")]
         public string Timezone { get; set; }

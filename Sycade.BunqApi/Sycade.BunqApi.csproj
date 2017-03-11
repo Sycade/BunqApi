@@ -70,9 +70,13 @@
     <Compile Include="Model\Id.cs" />
     <Compile Include="Model\Image.cs" />
     <Compile Include="Model\MonetaryAccountProfile.cs" />
+    <Compile Include="Model\MonetaryAccountStatus.cs" />
+    <Compile Include="Model\MonetaryAccountSubStatus.cs" />
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserPerson.cs" />
+    <Compile Include="Model\UserStatus.cs" />
+    <Compile Include="Model\UserSubStatus.cs" />
     <Compile Include="Requests\CreatePaymentRequest.cs" />
     <Compile Include="Responses\CreateInstallationResponse.cs" />
     <Compile Include="Model\NotificationFilter.cs" />

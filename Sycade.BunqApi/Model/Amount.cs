@@ -8,7 +8,6 @@ namespace Sycade.BunqApi.Model
         [JsonProperty("currency")]
         [JsonConverter(typeof(EnumToStringConverter))]
         public Currency Currency { get; set; }
-
         [JsonProperty("value")]
         [JsonConverter(typeof(DecimalToStringConverter))]
         public decimal Value { get; set; }
