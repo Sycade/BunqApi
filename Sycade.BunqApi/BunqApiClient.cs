@@ -27,40 +27,22 @@ namespace Sycade.BunqApi
 
         private string _apiKey;
         private X509Certificate2 _clientCertificate;
-        private string _sessionToken;
         private string _urlFormatString;
-        
 
-        /// <summary>
-        /// Your installation token. Will be set automatically when calling <see cref="CreateInstallationAsync"/>.
-        /// </summary>
-        public string InstallationToken { get; set; }
-        /// <summary>
-        /// The logged in user. Will be set automatically when calling <see cref="CreateSessionServerAsync"/>.
-        /// </summary>
-        public User User { get; private set; }
-
-        public BunqApiClient(string apiKey, string installationToken, X509Certificate2 clientCertificate, bool useSandbox)
+        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
         {
             _apiKey = apiKey;
             _clientCertificate = clientCertificate;
             _urlFormatString = useSandbox ? BunqSandboxApiUrlFormatString : BunqApiUrlFormatString;
-
-            InstallationToken = installationToken;
-        }
-
-        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
-            : this(apiKey, null, clientCertificate, useSandbox)
-        {
         }
 
 
         #region Device Server
-        public async Task<Id> CreateDeviceServerAsync(string description, params string[] permittedIpAddresses)
+        public async Task<Id> CreateDeviceServerAsync(string description, Token installationToken)
         {
             var request = new CreateDeviceServerRequest(description, _apiKey);
 
-            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, "device-server", InstallationToken, request);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, "device-server", installationToken, request);
 
             return responseObjects.Cast<Id>().First();
         }
@@ -74,49 +56,46 @@ namespace Sycade.BunqApi
             var responseObjects = await DoApiRequest(HttpMethod.Post, "installation", request);
             var response = new CreateInstallationResponse(responseObjects);
 
-            InstallationToken = response.Token.Value;
+            //InstallationToken = response.Token.Value;
 
             return response;
         }
         #endregion
 
         #region Monetary Account
-        public async Task<MonetaryAccountBank> GetMonetaryAccountBankAsync(int monetaryAccountId)
+        public async Task<MonetaryAccountBank> GetMonetaryAccountBankAsync(User user, int monetaryAccountId, Token sessionToken)
         {
-            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{User.Id}/monetary-account-bank/{monetaryAccountId}", _sessionToken);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{user.Id}/monetary-account-bank/{monetaryAccountId}", sessionToken);
 
             return responseObjects.Cast<MonetaryAccountBank>().First();
         }
 
-        public async Task<MonetaryAccountBank[]> ListMonetaryAccountBanksAsync()
+        public async Task<MonetaryAccountBank[]> ListMonetaryAccountBanksAsync(User user, Token sessionToken)
         {
-            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{User.Id}/monetary-account-bank", _sessionToken);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Get, $"user/{user.Id}/monetary-account-bank", sessionToken);
 
             return responseObjects.Cast<MonetaryAccountBank>().ToArray();
         }
         #endregion
 
         #region Payment
-        public async Task<Id> CreatePaymentAsync(int fromAccountId, Alias toAccount, Amount amount, string description)
+        public async Task<Id> CreatePaymentAsync(User user, int fromAccountId, Alias toAccount, Amount amount, string description, Token sessionToken)
         {
             var request = new CreatePaymentRequest(amount, toAccount, description);
 
-            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, $"user/{User.Id}/monetary-account/{fromAccountId}/payment", _sessionToken, request);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, $"user/{user.Id}/monetary-account/{fromAccountId}/payment", sessionToken, request);
 
             return responseObjects.Cast<Id>().First();
         }
         #endregion
 
         #region Session Server
-        public async Task<CreateSessionServerResponse> CreateSessionServerAsync()
+        public async Task<CreateSessionServerResponse> CreateSessionServerAsync(Token installationToken)
         {
             var request = new CreateSessionServerRequest(_apiKey);
 
-            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, "session-server", InstallationToken, request);
+            var responseObjects = await DoSignedApiRequest(HttpMethod.Post, "session-server", installationToken, request);
             var response = new CreateSessionServerResponse(responseObjects);
-
-            _sessionToken = response.Token.Value;
-            User = response.User;
 
             return response;
         }
@@ -133,7 +112,7 @@ namespace Sycade.BunqApi
             return await GetResponseObjectsAsync(httpResponse);
         }
 
-        private async Task<IBunqEntity[]> DoSignedApiRequest(HttpMethod method, string endpoint, string token, IBunqApiRequest request = null)
+        private async Task<IBunqEntity[]> DoSignedApiRequest(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
         {
             var content = request != null ? JsonConvert.SerializeObject(request) : "";
 
@@ -167,11 +146,11 @@ namespace Sycade.BunqApi
             return request;
         }
 
-        private HttpRequestMessage CreateSignedRequestMessage(HttpMethod method, string endpoint, string token, string content)
+        private HttpRequestMessage CreateSignedRequestMessage(HttpMethod method, string endpoint, Token token, string content)
         {
             var request = CreateRequestMessage(method, endpoint, content);
 
-            request.Headers.Add("X-Bunq-Client-Authentication", token);
+            request.Headers.Add("X-Bunq-Client-Authentication", token.Value);
             request.Headers.Add("X-Bunq-Client-Signature", GetClientSignatureHeader(request, endpoint, content));
 
             return request;

@@ -13,5 +13,12 @@ namespace Sycade.BunqApi.Model
         public DateTime Created { get; set; }
         [JsonProperty("updated")]
         public DateTime Updated { get; set; }
+
+        internal Token() { }
+
+        public Token(string value)
+        {
+            Value = value;
+        }
     }
 }
