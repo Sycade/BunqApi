@@ -12,5 +12,8 @@ namespace Sycade.BunqApi.Exceptions
         {
             TranslatedMessage = error.ErrorDescriptionTranslated;
         }
+
+        public BunqApiException(string message)
+            : base(message) { }
     }
 }

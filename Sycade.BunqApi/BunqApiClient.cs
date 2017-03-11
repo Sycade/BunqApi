@@ -22,6 +22,8 @@ namespace Sycade.BunqApi
         private const string BunqSandboxApiUrlFormatString = "https://sandbox.public.api.bunq.com/v{0}/{1}";
         private const int ApiVersion = 1;
 
+        private const string ClientSignatureHeaderName = "X-Bunq-Client-Signature";
+
         private string _urlFormatString;
 
         internal string ApiKey { get; }
@@ -85,18 +87,20 @@ namespace Sycade.BunqApi
             var request = CreateRequestMessage(method, endpoint, content);
 
             request.Headers.Add("X-Bunq-Client-Authentication", token.Value);
-            request.Headers.Add("X-Bunq-Client-Signature", GetClientSignatureHeader(request, endpoint, content));
+
+            SignRequest(request, endpoint, content);
 
             return request;
         }
 
-        private string GetClientSignatureHeader(HttpRequestMessage request, string endpoint, string content)
+
+        private void SignRequest(HttpRequestMessage requestMessage, string endpoint, string content)
         {
             var builder = new StringBuilder();
 
-            builder.AppendFormat("{0} /v{1}/{2}\n", request.Method.Method, ApiVersion, endpoint);
+            builder.AppendFormat("{0} /v{1}/{2}\n", requestMessage.Method.Method, ApiVersion, endpoint);
 
-            foreach (var header in request.Headers.Where(h => h.Key.StartsWith("X-Bunq-") || h.Key == "Cache-Control" || h.Key == "User-Agent").OrderBy(h => h.Key))
+            foreach (var header in requestMessage.Headers.Where(h => h.Key.StartsWith("X-Bunq-") || h.Key == "Cache-Control" || h.Key == "User-Agent").OrderBy(h => h.Key))
                 builder.AppendFormat("{0}: {1}\n", header.Key, header.Value.First());
 
             builder.Append("\n");
@@ -105,7 +109,33 @@ namespace Sycade.BunqApi
             var builderBytes = Encoding.UTF8.GetBytes(builder.ToString());
             var signatureData = ClientCertificate.GetRSAPrivateKey().SignData(builderBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 
-            return Convert.ToBase64String(signatureData);
+            requestMessage.Headers.Add(ClientSignatureHeaderName, Convert.ToBase64String(signatureData));
+        }
+
+        public void VerifyResponse(RSA serverPublicKey, HttpResponseMessage responseMessage, string content)
+        {
+            var clientSignatureHeader = responseMessage.Headers.FirstOrDefault(h => h.Key == ClientSignatureHeaderName).Value.FirstOrDefault();
+
+            if (clientSignatureHeader == null)
+                throw new BunqApiException("Server sent an invalid response. No signature header found.");
+
+            var builder = new StringBuilder();
+
+            builder.AppendFormat("{0}\n", responseMessage.StatusCode);
+
+            foreach (var header in responseMessage.Headers.Where(h => h.Key.StartsWith("X-Bunq-") && h.Key != ClientSignatureHeaderName).OrderBy(h => h.Key))
+                builder.AppendFormat("{0}: {1}\n", header.Key, header.Value.First());
+
+            builder.Append("\n");
+            builder.Append(content);
+
+            var serverSignature = Convert.FromBase64String(clientSignatureHeader);
+
+            var builderBytes = Encoding.UTF8.GetBytes(builder.ToString());
+
+            if (!serverPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
+                throw new BunqApiException("Server sent an invalid response. Could not verify signature.");
+
         }
 
 
