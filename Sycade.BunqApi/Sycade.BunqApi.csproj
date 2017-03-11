@@ -47,6 +47,12 @@
     <Compile Include="BunqApiClient.cs" />
     <Compile Include="Converters\CurrencyConverter.cs" />
     <Compile Include="Converters\AmountValueConverter.cs" />
+    <Compile Include="Endpoints\DeviceServerEndpoint.cs" />
+    <Compile Include="Endpoints\Endpoint.cs" />
+    <Compile Include="Endpoints\InstallationEndpoint.cs" />
+    <Compile Include="Endpoints\MonetaryAccountEndpoint.cs" />
+    <Compile Include="Endpoints\PaymentEndpoint.cs" />
+    <Compile Include="Endpoints\SessionServerEndpoint.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\Currency.cs" />
