@@ -12,7 +12,7 @@ namespace Sycade.BunqApi.Endpoints
             : base(apiClient) { }
 
 
-        public async Task<Id> CreatePaymentAsync(User user, int fromAccountId, Alias toAccount, Amount amount, string description, Token sessionToken)
+        public async Task<Id> CreateAsync(User user, int fromAccountId, Alias toAccount, Amount amount, string description, Token sessionToken)
         {
             var request = new CreatePaymentRequest(amount, toAccount, description);
 

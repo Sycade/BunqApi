@@ -57,6 +57,7 @@
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\Currency.cs" />
     <Compile Include="Model\IBunqEntity.cs" />
+    <Compile Include="Model\MonetaryAccount.cs" />
     <Compile Include="Model\MonetaryAccountBank.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\Alias.cs" />
