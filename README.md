@@ -22,12 +22,11 @@ bunq.SetServerPublicKey(installation.ServerPublicKey);
 var deviceServer = await new DeviceServerEndpoint(bunq).CreateAsync("My First DeviceServer", installation.Token);
 var session = await new SessionServerEndpoint(bunq).CreateSessionAsync(installation.Token);
 
-// Get all monetary accounts for the User
-var accounts = await new MonetaryAccountEndpoint(bunq).ListAsync(session);
+// Get all bank accounts for the User
+var accounts = await new MonetaryAccountBankEndpoint(bunq).ListAsync(session);
 
-// Pay 25 euros from the first to an IBAN number
-var paymentId = await new PaymentEndpoint(bunq).CreateAsync(accounts[0].Id,
-    accounts[1].Aliases[0], new Amount(Currency.EUR, 25m), "My First Payment", session);
+// Pay 25 euros from the first account to the second
+var paymentId = await accounts[0].CreatePaymentAsync(new Amount(Currency.EUR, 25m), accounts[1], "My First Payment", session);
 ```
 ### Reuse an existing installation
 ```csharp
