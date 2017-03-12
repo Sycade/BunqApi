@@ -8,11 +8,11 @@ namespace Sycade.BunqApi.Model
         public Token Token { get; }
         public ServerPublicKey ServerPublicKey { get; }
 
-        public CreateInstallationResponse(IBunqEntity[] responseObjects)
+        public CreateInstallationResponse(IBunqEntity[] entities)
         {
-            Id = responseObjects.OfType<Id>().First();
-            Token = responseObjects.OfType<Token>().First();
-            ServerPublicKey = responseObjects.OfType<ServerPublicKey>().First();
+            Id = entities.OfType<Id>().First();
+            Token = entities.OfType<Token>().First();
+            ServerPublicKey = entities.OfType<ServerPublicKey>().First();
         }
     }
 }

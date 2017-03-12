@@ -9,7 +9,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class PaymentEndpoint : Endpoint
     {
-        public PaymentEndpoint(BunqApiClient apiClient)
+        public PaymentEndpoint(BunqHttpClient apiClient)
             : base(apiClient) { }
 
 
@@ -17,9 +17,9 @@ namespace Sycade.BunqApi.Endpoints
         {
             var request = new CreatePaymentRequest(amount, to, description);
 
-            var responseObjects = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, $"user/{session.User.Id}/monetary-account/{fromAccountId}/payment", session.Token, request);
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, $"user/{session.User.Id}/monetary-account/{fromAccountId}/payment", session.Token, request);
 
-            return responseObjects.Cast<Id>().First();
+            return entities.Cast<Id>().First();
         }
     }
 }

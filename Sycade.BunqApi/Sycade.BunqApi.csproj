@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BunqApiClient.cs" />
+    <Compile Include="BunqHttpClient.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\DecimalToStringConverter.cs" />
     <Compile Include="Endpoints\DeviceServerEndpoint.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Endpoints\MonetaryAccountBankEndpoint.cs" />
     <Compile Include="Endpoints\MonetaryAccountEndpoint.cs" />
     <Compile Include="Endpoints\PaymentEndpoint.cs" />
+    <Compile Include="Endpoints\SessionEndpoint.cs" />
     <Compile Include="Endpoints\SessionServerEndpoint.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
     <Compile Include="Model\AliasType.cs" />

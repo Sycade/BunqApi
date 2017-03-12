@@ -2,9 +2,9 @@
 {
     public abstract class Endpoint
     {
-        internal BunqApiClient ApiClient { get; }
+        internal BunqHttpClient ApiClient { get; }
 
-        public Endpoint(BunqApiClient apiClient)
+        internal Endpoint(BunqHttpClient apiClient)
         {
             ApiClient = apiClient;
         }

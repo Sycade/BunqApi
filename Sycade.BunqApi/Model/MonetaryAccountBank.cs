@@ -9,7 +9,7 @@ namespace Sycade.BunqApi.Model
     {
         private PaymentEndpoint _paymentEndpoint;
 
-        void IBunqInteractableEntity.Initialize(BunqApiClient apiClient)
+        void IBunqInteractableEntity.Initialize(BunqHttpClient apiClient)
         {
             _paymentEndpoint = new PaymentEndpoint(apiClient);
         }

@@ -1,19 +1,28 @@
-﻿using Sycade.BunqApi.Model;
+﻿using Sycade.BunqApi.Endpoints;
+using Sycade.BunqApi.Model;
 using System.Linq;
 
 namespace Sycade.BunqApi.Responses
 {
-    public class Session
+    public class Session : IBunqInteractableEntity
     {
+        private SessionEndpoint _sessionEndpoint;
+
         public Id Id { get; }
         public Token Token { get; }
         public User User { get; }
 
-        internal Session(IBunqEntity[] responseObjects)
+        internal Session(IBunqEntity[] entities)
         {
-            Id = responseObjects.OfType<Id>().First();
-            Token = responseObjects.OfType<Token>().First();
-            User = responseObjects.OfType<User>().First();
+            Id = entities.OfType<Id>().First();
+            Token = entities.OfType<Token>().First();
+            User = entities.OfType<User>().First();
+        }
+
+
+        void IBunqInteractableEntity.Initialize(BunqHttpClient apiClient)
+        {
+            _sessionEndpoint = new SessionEndpoint(apiClient);
         }
     }
 }

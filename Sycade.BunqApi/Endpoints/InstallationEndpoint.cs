@@ -9,7 +9,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class InstallationEndpoint : Endpoint
     {
-        public InstallationEndpoint(BunqApiClient apiClient)
+        public InstallationEndpoint(BunqHttpClient apiClient)
             : base(apiClient) { }
 
 
@@ -17,8 +17,8 @@ namespace Sycade.BunqApi.Endpoints
         {
             var request = new CreateInstallationRequest(ApiClient.ClientCertificate.GetRSAPublicKey().ToPemString());
 
-            var responseObjects = await ApiClient.DoApiRequestAsync(HttpMethod.Post, "installation", request);
-            var response = new CreateInstallationResponse(responseObjects);
+            var entities = await ApiClient.DoApiRequestAsync(HttpMethod.Post, "installation", request);
+            var response = new CreateInstallationResponse(entities);
 
             return response;
         }

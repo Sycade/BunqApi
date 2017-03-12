@@ -8,22 +8,22 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class MonetaryAccountBankEndpoint : Endpoint
     {
-        public MonetaryAccountBankEndpoint(BunqApiClient apiClient)
+        public MonetaryAccountBankEndpoint(BunqHttpClient apiClient)
             : base(apiClient) { }
 
 
         public async Task<MonetaryAccountBank> GetAsync(int monetaryAccountBankId, Session session)
         {
-            var responseObjects = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank/{monetaryAccountBankId}", session.Token);
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank/{monetaryAccountBankId}", session.Token);
 
-            return responseObjects.Cast<MonetaryAccountBank>().First();
+            return entities.Cast<MonetaryAccountBank>().First();
         }
 
         public async Task<MonetaryAccountBank[]> ListAsync(Session session)
         {
-            var responseObjects = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank", session.Token);
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank", session.Token);
 
-            return responseObjects.Cast<MonetaryAccountBank>().ToArray();
+            return entities.Cast<MonetaryAccountBank>().ToArray();
         }
     }
 }

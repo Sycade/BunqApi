@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class SessionServerEndpoint : Endpoint
     {
-        public SessionServerEndpoint(BunqApiClient apiClient)
+        public SessionServerEndpoint(BunqHttpClient apiClient)
             : base(apiClient) { }
 
 
@@ -16,8 +16,8 @@ namespace Sycade.BunqApi.Endpoints
         {
             var request = new CreateSessionServerRequest(ApiClient.ApiKey);
 
-            var responseObjects = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, "session-server", installationToken, request);
-            var response = new Session(responseObjects);
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, "session-server", installationToken, request);
+            var response = new Session(entities);
 
             return response;
         }

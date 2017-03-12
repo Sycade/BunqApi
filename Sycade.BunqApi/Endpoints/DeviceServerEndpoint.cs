@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class DeviceServerEndpoint : Endpoint
     {
-        public DeviceServerEndpoint(BunqApiClient apiClient)
+        public DeviceServerEndpoint(BunqHttpClient apiClient)
             : base(apiClient) { }
 
 
@@ -16,9 +16,9 @@ namespace Sycade.BunqApi.Endpoints
         {
             var request = new CreateDeviceServerRequest(description, ApiClient.ApiKey);
 
-            var responseObjects = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, "device-server", installationToken, request);
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, "device-server", installationToken, request);
 
-            return responseObjects.Cast<Id>().First();
+            return entities.Cast<Id>().First();
         }
     }
 }
