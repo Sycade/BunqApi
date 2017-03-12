@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class DeviceServerEndpoint : Endpoint
     {
-        public DeviceServerEndpoint(BunqHttpClient apiClient)
+        public DeviceServerEndpoint(BunqApiClient apiClient)
             : base(apiClient) { }
 
 

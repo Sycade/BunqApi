@@ -2,6 +2,6 @@
 {
     internal interface IBunqInteractableEntity : IBunqEntity
     {
-        void Initialize(BunqHttpClient apiClient);
+        void Initialize(BunqApiClient apiClient);
     }
 }

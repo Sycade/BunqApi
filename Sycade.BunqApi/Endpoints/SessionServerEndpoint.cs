@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class SessionServerEndpoint : Endpoint
     {
-        public SessionServerEndpoint(BunqHttpClient apiClient)
+        public SessionServerEndpoint(BunqApiClient apiClient)
             : base(apiClient) { }
 
 

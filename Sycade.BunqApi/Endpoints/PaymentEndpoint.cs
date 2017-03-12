@@ -9,7 +9,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class PaymentEndpoint : Endpoint
     {
-        public PaymentEndpoint(BunqHttpClient apiClient)
+        public PaymentEndpoint(BunqApiClient apiClient)
             : base(apiClient) { }
 
 

@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class MonetaryAccountEndpoint : Endpoint
     {
-        public MonetaryAccountEndpoint(BunqHttpClient apiClient)
+        public MonetaryAccountEndpoint(BunqApiClient apiClient)
             : base(apiClient) { }
 
 

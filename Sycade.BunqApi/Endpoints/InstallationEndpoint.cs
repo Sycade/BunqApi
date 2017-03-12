@@ -9,7 +9,7 @@ namespace Sycade.BunqApi.Endpoints
 {
     public class InstallationEndpoint : Endpoint
     {
-        public InstallationEndpoint(BunqHttpClient apiClient)
+        public InstallationEndpoint(BunqApiClient apiClient)
             : base(apiClient) { }
 
 

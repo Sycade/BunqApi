@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Sycade.BunqApi.Endpoints;
 using Sycade.BunqApi.Exceptions;
 using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
@@ -20,7 +21,7 @@ namespace Sycade.BunqApi
     /// <summary>
     /// Executes HTTP requests to the bunq API and parses responses.
     /// </summary>
-    public class BunqHttpClient
+    public class BunqApiClient
     {
         private const string BunqApiUrlFormatString = "https://api.bunq.com/v{0}/{1}";
         private const string BunqSandboxApiUrlFormatString = "https://sandbox.public.api.bunq.com/v{0}/{1}";
@@ -35,7 +36,14 @@ namespace Sycade.BunqApi
         internal string ApiKey { get; }
         internal X509Certificate2 ClientCertificate { get; }
 
-        internal BunqHttpClient(string apiKey, X509Certificate2 clientCertificate, ServerPublicKey serverPublicKey, bool useSandbox)
+        public DeviceServerEndpoint DeviceServer { get; private set; }
+        public InstallationEndpoint Installation { get; private set; }
+        public MonetaryAccountBankEndpoint MonetaryAccountBank { get; private set; }
+        public PaymentEndpoint Payment { get; private set; }
+        public SessionEndpoint Session { get; private set; }
+        public SessionServerEndpoint SessionServer { get; private set; }
+
+        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, ServerPublicKey serverPublicKey, bool useSandbox)
         {
             ApiKey = apiKey;
             ClientCertificate = clientCertificate;
@@ -44,12 +52,27 @@ namespace Sycade.BunqApi
 
             if (serverPublicKey != null)
                 SetServerPublicKey(serverPublicKey);
-        }      
+
+            InitializeEndpoints();
+        }
+
+        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
+            : this(apiKey, clientCertificate, null, useSandbox) { }
 
 
         public void SetServerPublicKey(ServerPublicKey serverPublicKey)
         {
             _serverPublicKey = RSAExtensions.FromPemString(serverPublicKey.Value);
+        }
+
+        private void InitializeEndpoints()
+        {
+            DeviceServer = new DeviceServerEndpoint(this);
+            Installation = new InstallationEndpoint(this);
+            MonetaryAccountBank = new MonetaryAccountBankEndpoint(this);
+            Payment = new PaymentEndpoint(this);
+            Session = new SessionEndpoint(this);
+            SessionServer = new SessionServerEndpoint(this);
         }
 
 

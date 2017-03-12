@@ -16,14 +16,14 @@ var useSandbox = true;
 var bunq = new BunqApiClient("your-api-key", clientCertificate, useSandbox);
 
 // Link your API key to this IP address
-var installation = await new InstallationEndpoint(bunq).CreateAsync();
+var installation = await bunq.Installation.CreateAsync();
 bunq.SetServerPublicKey(installation.ServerPublicKey);
 
-var deviceServer = await new DeviceServerEndpoint(bunq).CreateAsync("My First DeviceServer", installation.Token);
-var session = await new SessionServerEndpoint(bunq).CreateSessionAsync(installation.Token);
+var deviceServer = await bunq.DeviceServer.CreateAsync("My First DeviceServer", installation.Token);
+var session = await bunq.SessionServer.CreateSessionAsync(installation.Token);
 
 // Get all bank accounts for the User
-var accounts = await new MonetaryAccountBankEndpoint(bunq).ListAsync(session);
+var accounts = await bunq.MonetaryAccountBank.ListAsync(session);
 
 // Pay 25 euros from the first account to the second
 var paymentId = await accounts[0].CreatePaymentAsync(new Amount(Currency.EUR, 25m), accounts[1], "My First Payment", session);
@@ -39,6 +39,6 @@ var useSandbox = true;
 
 var bunq = new BunqApiClient("your-api-key", clientCertificate, serverPublicKey, useSandbox);
 
-var session = await new SessionServerEndpoint(bunq).CreateSessionAsync(installationToken);
+var session = await bunq.SessionServer.CreateSessionAsync(installationToken);
 // ... Use your session
 ```
