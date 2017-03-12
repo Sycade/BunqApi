@@ -39,7 +39,8 @@ namespace Sycade.BunqApi
 
             _urlFormatString = useSandbox ? BunqSandboxApiUrlFormatString : BunqApiUrlFormatString;
 
-            SetServerPublicKey(serverPublicKey);
+            if (serverPublicKey != null)
+                SetServerPublicKey(serverPublicKey);
         }
 
         public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
@@ -60,7 +61,7 @@ namespace Sycade.BunqApi
             var responseMessage = await SendRequestMessageAsync(requestMessage);
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-            return await GetResponseObjectsAsync(responseMessage, responseContent);
+            return await GetEntitiesAsync(responseMessage, responseContent);
         }
 
         internal async Task<IBunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
@@ -76,7 +77,7 @@ namespace Sycade.BunqApi
 
             VerifyResponse(responseMessage, responseContent);
 
-            return await GetResponseObjectsAsync(responseMessage, responseContent);
+            return await GetEntitiesAsync(responseMessage, responseContent);
         }
 
         private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)
@@ -158,10 +159,10 @@ namespace Sycade.BunqApi
         }
 
 
-        private async Task<IBunqEntity[]> GetResponseObjectsAsync(HttpResponseMessage responseMessage, string content)
+        private async Task<IBunqEntity[]> GetEntitiesAsync(HttpResponseMessage responseMessage, string content)
         {
-            var responseObject = JObject.Parse(await responseMessage.Content.ReadAsStringAsync());
-            var responseArray = (JArray)((JProperty)responseObject.First).Value;
+            var parsedObject = JObject.Parse(await responseMessage.Content.ReadAsStringAsync());
+            var responseArray = (JArray)((JProperty)parsedObject.First).Value;
 
             if (responseMessage.StatusCode != HttpStatusCode.OK)
             {
@@ -170,7 +171,7 @@ namespace Sycade.BunqApi
                 throw new BunqApiException(error);
             }
 
-            var responseObjects = new List<IBunqEntity>();
+            var entities = new List<IBunqEntity>();
 
             foreach (var element in responseArray.Cast<JObject>())
             {
@@ -178,11 +179,15 @@ namespace Sycade.BunqApi
                 var propertyValue = (JObject)property.Value;
 
                 var type = EntityTypeCollection.FindByName(property.Name);
+                var entity = (IBunqEntity)propertyValue.ToObject(type);
 
-                responseObjects.Add((IBunqEntity)propertyValue.ToObject(type));
+                if (entity is IBunqInteractableEntity interactable)
+                    interactable.Initialize(this);
+
+                entities.Add(entity);
             }
 
-            return responseObjects.ToArray();
+            return entities.ToArray();
         }
     }
 }
