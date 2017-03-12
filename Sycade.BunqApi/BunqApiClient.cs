@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Sycade.BunqApi.Endpoints;
 using Sycade.BunqApi.Exceptions;
 using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
@@ -33,13 +32,18 @@ namespace Sycade.BunqApi
         internal string ApiKey { get; }
         internal X509Certificate2 ClientCertificate { get; }
 
-        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
+        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, ServerPublicKey serverPublicKey, bool useSandbox)
         {
             ApiKey = apiKey;
             ClientCertificate = clientCertificate;
-   
+
             _urlFormatString = useSandbox ? BunqSandboxApiUrlFormatString : BunqApiUrlFormatString;
+
+            SetServerPublicKey(serverPublicKey);
         }
+
+        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
+            : this(apiKey, clientCertificate, null, useSandbox) { }
 
 
         public void SetServerPublicKey(ServerPublicKey serverPublicKey)

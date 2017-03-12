@@ -3,13 +3,13 @@ using System.Linq;
 
 namespace Sycade.BunqApi.Responses
 {
-    public class CreateSessionServerResponse
+    public class Session
     {
         public Id Id { get; }
         public Token Token { get; }
         public User User { get; }
 
-        public CreateSessionServerResponse(IBunqEntity[] responseObjects)
+        internal Session(IBunqEntity[] responseObjects)
         {
             Id = responseObjects.OfType<Id>().First();
             Token = responseObjects.OfType<Token>().First();
