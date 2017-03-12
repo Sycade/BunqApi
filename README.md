@@ -20,14 +20,14 @@ var installation = await new InstallationEndpoint(bunq).CreateAsync();
 bunq.SetServerPublicKey(installation.ServerPublicKey);
 
 var deviceServer = await new DeviceServerEndpoint(bunq).CreateAsync("My First DeviceServer", installation.Token);
-var sessionServer = await new SessionServerEndpoint(bunq).CreateAsync(installation.Token);
+var session = await new SessionServerEndpoint(bunq).CreateSessionAsync(installation.Token);
 
 // Get all monetary accounts for the User
-var accounts = await new MonetaryAccountEndpoint(bunq).ListAsync(sessionServer.User, sessionServer.Token);
+var accounts = await new MonetaryAccountEndpoint(bunq).ListAsync(session);
 
-// Pay 25 euros from the first to the second bank account in the user account
-var paymentId = await new PaymentEndpoint(bunq).CreateAsync(sessionServer.User, accounts[0].Id,
-    accounts[1].Aliases[0], new Amount(Currency.EUR, 25m), "My First Payment", sessionServer.Token);
+// Pay 25 euros from the first to an IBAN number
+var paymentId = await new PaymentEndpoint(bunq).CreateAsync(accounts[0].Id,
+    accounts[1].Aliases[0], new Amount(Currency.EUR, 25m), "My First Payment", session);
 ```
 ### Reuse an existing installation
 ```csharp
@@ -38,9 +38,8 @@ var installationToken = new Token(File.ReadAllText("the-installation-token.txt")
 
 var useSandbox = true;
 
-var bunq = new BunqApiClient("your-api-key", clientCertificate, useSandbox);
-bunq.SetServerPublicKey(serverPublicKey);
+var bunq = new BunqApiClient("your-api-key", clientCertificate, serverPublicKey, useSandbox);
 
-var sessionServer = await new SessionServerEndpoint(bunq).CreateAsync(installationToken);
-// ... use your active session
+var session = await new SessionServerEndpoint(bunq).CreateSessionAsync(installationToken);
+// ... Use your session
 ```
