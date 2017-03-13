@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BunqHttpClient.cs" />
+    <Compile Include="BunqApiClient.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\DecimalToStringConverter.cs" />
     <Compile Include="Endpoints\DeviceServerEndpoint.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\CreateSessionServerRequest.cs" />
     <Compile Include="Requests\IBunqApiRequest.cs" />
-    <Compile Include="Responses\CreateSessionServerResponse.cs" />
+    <Compile Include="Responses\Session.cs" />
     <Compile Include="Utilities\BigEndianBitConverter.cs" />
     <Compile Include="Utilities\EntityTypeCollection.cs" />
   </ItemGroup>

@@ -211,7 +211,7 @@ namespace Sycade.BunqApi
                 var entity = (IBunqEntity)propertyValue.ToObject(type);
 
                 if (entity is IBunqInteractableEntity interactable)
-                    interactable.Initialize(this);
+                    interactable.ApiClient = this;
 
                 entities.Add(entity);
             }
