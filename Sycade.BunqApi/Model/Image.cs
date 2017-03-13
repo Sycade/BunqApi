@@ -3,7 +3,7 @@ using System;
 
 namespace Sycade.BunqApi.Model
 {
-    public class Image : IBunqEntity
+    public class Image : BunqEntity
     {
         [JsonProperty("attachment_public_uuid")]
         public Guid AttachmentPublicUuid { get; set; }

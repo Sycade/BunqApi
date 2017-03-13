@@ -47,20 +47,27 @@
     <Compile Include="BunqApiClient.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\DecimalToStringConverter.cs" />
+    <Compile Include="Endpoints\CardEndpoint.cs" />
     <Compile Include="Endpoints\DeviceServerEndpoint.cs" />
     <Compile Include="Endpoints\Endpoint.cs" />
     <Compile Include="Endpoints\InstallationEndpoint.cs" />
     <Compile Include="Endpoints\MonetaryAccountBankEndpoint.cs" />
     <Compile Include="Endpoints\MonetaryAccountEndpoint.cs" />
     <Compile Include="Endpoints\PaymentEndpoint.cs" />
+    <Compile Include="Endpoints\RequestInquiryEndpoint.cs" />
     <Compile Include="Endpoints\SessionEndpoint.cs" />
     <Compile Include="Endpoints\SessionServerEndpoint.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
     <Compile Include="Model\AliasType.cs" />
     <Compile Include="Model\Attachment.cs" />
+    <Compile Include="Model\CardDebit.cs" />
+    <Compile Include="Model\CardDebitOrderStatus.cs" />
+    <Compile Include="Model\CardDebitStatus.cs" />
+    <Compile Include="Model\CountryPermission.cs" />
     <Compile Include="Model\Currency.cs" />
-    <Compile Include="Model\IBunqEntity.cs" />
-    <Compile Include="Model\IBunqInteractableEntity.cs" />
+    <Compile Include="Model\BunqEntity.cs" />
+    <Compile Include="Model\Limit.cs" />
+    <Compile Include="Model\MagStripePermission.cs" />
     <Compile Include="Model\MonetaryAccount.cs" />
     <Compile Include="Model\MonetaryAccountBank.cs" />
     <Compile Include="Model\Address.cs" />
@@ -81,7 +88,7 @@
     <Compile Include="Model\UserStatus.cs" />
     <Compile Include="Model\UserSubStatus.cs" />
     <Compile Include="Requests\CreatePaymentRequest.cs" />
-    <Compile Include="Responses\CreateInstallationResponse.cs" />
+    <Compile Include="Model\Installation.cs" />
     <Compile Include="Model\NotificationFilter.cs" />
     <Compile Include="Model\ServerPublicKey.cs" />
     <Compile Include="Model\Token.cs" />
@@ -92,12 +99,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\CreateSessionServerRequest.cs" />
     <Compile Include="Requests\IBunqApiRequest.cs" />
-    <Compile Include="Responses\Session.cs" />
+    <Compile Include="Model\Session.cs" />
     <Compile Include="Utilities\BigEndianBitConverter.cs" />
     <Compile Include="Utilities\EntityTypeCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Responses\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,7 +3,7 @@ using Sycade.BunqApi.Converters;
 
 namespace Sycade.BunqApi.Model
 {
-    public class Amount : IBunqEntity
+    public class Amount : BunqEntity
     {
         [JsonProperty("currency")]
         [JsonConverter(typeof(EnumToStringConverter))]

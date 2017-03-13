@@ -4,7 +4,7 @@ using System;
 
 namespace Sycade.BunqApi.Model
 {
-    public abstract class MonetaryAccount
+    public abstract class MonetaryAccount : BunqEntity
     {
         [JsonProperty("id")]
         public int Id { get; set; }

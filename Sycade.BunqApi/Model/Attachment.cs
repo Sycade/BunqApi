@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class Attachment : IBunqEntity
+    public class Attachment : BunqEntity
     {
         [JsonProperty("id")]
         public int Id { get; set; }

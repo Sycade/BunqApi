@@ -1,20 +1,15 @@
-﻿using Sycade.BunqApi.Model;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using System;
 
-namespace Sycade.BunqApi.Responses
+namespace Sycade.BunqApi.Model
 {
-    public class Session : IBunqInteractableEntity
+    public class Session : BunqEntity
     {
-        public BunqApiClient ApiClient { get; set; }
-
         public Id Id { get; }
         public Token Token { get; }
         public User User { get; }
         
-
-        internal Session(IBunqEntity[] entities)
+        internal Session(BunqEntity[] entities)
         {
             Id = entities.OfType<Id>().First();
             Token = entities.OfType<Token>().First();

@@ -36,6 +36,7 @@ namespace Sycade.BunqApi
         internal string ApiKey { get; }
         internal X509Certificate2 ClientCertificate { get; }
 
+        public CardEndpoint Card { get; private set; }
         public DeviceServerEndpoint DeviceServer { get; private set; }
         public InstallationEndpoint Installation { get; private set; }
         public MonetaryAccountBankEndpoint MonetaryAccountBank { get; private set; }
@@ -68,6 +69,7 @@ namespace Sycade.BunqApi
 
         private void InitializeEndpoints()
         {
+            Card = new CardEndpoint(this);
             DeviceServer = new DeviceServerEndpoint(this);
             Installation = new InstallationEndpoint(this);
             MonetaryAccountBank = new MonetaryAccountBankEndpoint(this);
@@ -77,7 +79,7 @@ namespace Sycade.BunqApi
         }
 
 
-        internal async Task<IBunqEntity[]> DoApiRequestAsync(HttpMethod method, string endpoint, IBunqApiRequest request = null)
+        internal async Task<BunqEntity[]> DoApiRequestAsync(HttpMethod method, string endpoint, IBunqApiRequest request = null)
         {
             var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
             var requestMessage = CreateRequestMessage(method, endpoint, requestContent);
@@ -89,7 +91,7 @@ namespace Sycade.BunqApi
             return GetEntities(responseArray);
         }
 
-        internal async Task<IBunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        internal async Task<BunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
         {
             if (_serverPublicKey == null)
                 throw new BunqApiException("Server public key was not set.");
@@ -199,9 +201,9 @@ namespace Sycade.BunqApi
         }
 
 
-        private IBunqEntity[] GetEntities(JArray responseArray)
+        private BunqEntity[] GetEntities(JArray responseArray)
         { 
-            var entities = new List<IBunqEntity>();
+            var entities = new List<BunqEntity>();
 
             foreach (var element in responseArray.Cast<JObject>())
             {
@@ -209,10 +211,9 @@ namespace Sycade.BunqApi
                 var propertyValue = (JObject)property.Value;
 
                 var type = EntityTypeCollection.FindByName(property.Name);
-                var entity = (IBunqEntity)propertyValue.ToObject(type);
 
-                if (entity is IBunqInteractableEntity interactable)
-                    interactable.ApiClient = this;
+                var entity = (BunqEntity)propertyValue.ToObject(type);
+                entity.ApiClient = this;
 
                 entities.Add(entity);
             }

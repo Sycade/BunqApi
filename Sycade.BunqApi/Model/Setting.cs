@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class Setting : IBunqEntity
+    public class Setting : BunqEntity
     {
         [JsonProperty("color")]
         public string Color { get; set; }

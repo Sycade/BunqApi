@@ -3,7 +3,7 @@ using System;
 
 namespace Sycade.BunqApi.Model
 {
-    public class DirectorAlias : IBunqEntity
+    public class DirectorAlias : BunqEntity
     {
         [JsonProperty("uuid")]
         public Guid Uuid { get; set; }

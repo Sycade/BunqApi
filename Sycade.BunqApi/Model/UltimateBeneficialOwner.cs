@@ -3,7 +3,7 @@ using System;
 
 namespace Sycade.BunqApi.Model
 {
-    public class UltimateBeneficialOwner : IBunqEntity
+    public class UltimateBeneficialOwner : BunqEntity
     {
         [JsonProperty("name")]
         public string Name { get; set; }

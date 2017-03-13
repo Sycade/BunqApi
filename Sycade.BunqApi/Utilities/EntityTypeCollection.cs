@@ -13,7 +13,7 @@ namespace Sycade.BunqApi.Utilities
         static EntityTypeCollection()
         {
             _entityTypes = (from t in Assembly.GetExecutingAssembly().GetTypes()
-                            where typeof(IBunqEntity).IsAssignableFrom(t)
+                            where typeof(BunqEntity).IsAssignableFrom(t)
                             select t).ToDictionary(t => t.Name, t => t);
         }
 

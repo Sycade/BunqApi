@@ -2,7 +2,7 @@
 
 namespace Sycade.BunqApi.Model
 {
-    public class Error : IBunqEntity
+    public class Error : BunqEntity
     {
         [JsonProperty("error_description")]
         public string ErrorDescription { get; set; }

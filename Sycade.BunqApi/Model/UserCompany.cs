@@ -3,7 +3,7 @@ using System;
 
 namespace Sycade.BunqApi.Model
 {
-    public class UserCompany : User, IBunqEntity
+    public class UserCompany : User
     {
         [JsonProperty("counter_bank_iban")]
         public string CounterBankIban { get; set; }

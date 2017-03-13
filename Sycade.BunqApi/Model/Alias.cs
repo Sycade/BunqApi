@@ -3,7 +3,7 @@ using Sycade.BunqApi.Converters;
 
 namespace Sycade.BunqApi.Model
 {
-    public class Alias : IBunqEntity
+    public class Alias : BunqEntity
     {
         [JsonProperty("type")]
         [JsonConverter(typeof(EnumToStringConverter))]

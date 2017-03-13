@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Model
         public Token Token { get; }
         public ServerPublicKey ServerPublicKey { get; }
 
-        public CreateInstallationResponse(IBunqEntity[] entities)
+        public CreateInstallationResponse(BunqEntity[] entities)
         {
             Id = entities.OfType<Id>().First();
             Token = entities.OfType<Token>().First();
