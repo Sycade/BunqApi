@@ -62,7 +62,8 @@ namespace Sycade.BunqApi
 
         public void SetServerPublicKey(ServerPublicKey serverPublicKey)
         {
-            _serverPublicKey = RSAExtensions.FromPemString(serverPublicKey.Value);
+            _serverPublicKey = RSA.Create();
+            _serverPublicKey.FromPemString(serverPublicKey.Value);
         }
 
         private void InitializeEndpoints()

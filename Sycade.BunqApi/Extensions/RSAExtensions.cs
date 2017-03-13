@@ -26,7 +26,7 @@ namespace Sycade.BunqApi.Extensions
             return $"-----BEGIN PUBLIC KEY-----\n{string.Join("\n", lines)}\n-----END PUBLIC KEY-----\n";
         }
 
-        public static RSA FromPemString(string pemString)
+        public static void FromPemString(this RSA rsa, string pemString)
         {
             var lines = pemString.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             lines.Remove(lines.First());
@@ -45,10 +45,7 @@ namespace Sycade.BunqApi.Extensions
                 Modulus = modulus.ToArray()
             };
 
-            var rsa = RSA.Create();
             rsa.ImportParameters(rsaParams);
-
-            return rsa;
         }
 
 
