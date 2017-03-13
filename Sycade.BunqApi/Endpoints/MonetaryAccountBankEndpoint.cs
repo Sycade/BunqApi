@@ -1,4 +1,5 @@
 ﻿using Sycade.BunqApi.Model;
+using Sycade.BunqApi.Responses;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;

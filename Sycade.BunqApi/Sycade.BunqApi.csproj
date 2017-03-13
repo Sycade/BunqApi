@@ -82,13 +82,14 @@
     <Compile Include="Model\MonetaryAccountProfile.cs" />
     <Compile Include="Model\MonetaryAccountStatus.cs" />
     <Compile Include="Model\MonetaryAccountSubStatus.cs" />
+    <Compile Include="Model\Payment.cs" />
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserPerson.cs" />
     <Compile Include="Model\UserStatus.cs" />
     <Compile Include="Model\UserSubStatus.cs" />
     <Compile Include="Requests\CreatePaymentRequest.cs" />
-    <Compile Include="Model\Installation.cs" />
+    <Compile Include="Responses\Installation.cs" />
     <Compile Include="Model\NotificationFilter.cs" />
     <Compile Include="Model\ServerPublicKey.cs" />
     <Compile Include="Model\Token.cs" />
@@ -99,16 +100,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\CreateSessionServerRequest.cs" />
     <Compile Include="Requests\IBunqApiRequest.cs" />
-    <Compile Include="Model\Session.cs" />
+    <Compile Include="Responses\Session.cs" />
     <Compile Include="Utilities\BigEndianBitConverter.cs" />
     <Compile Include="Utilities\EntityTypeCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Responses\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

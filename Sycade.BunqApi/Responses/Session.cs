@@ -1,7 +1,8 @@
-﻿using System.Linq;
+﻿using Sycade.BunqApi.Model;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Responses
 {
     public class Session : BunqEntity
     {

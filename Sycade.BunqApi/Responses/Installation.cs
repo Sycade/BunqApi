@@ -1,14 +1,15 @@
-﻿using System.Linq;
+﻿using Sycade.BunqApi.Model;
+using System.Linq;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Responses
 {
-    public class CreateInstallationResponse
+    public class Installation
     {
         public Id Id { get; }
         public Token Token { get; }
         public ServerPublicKey ServerPublicKey { get; }
 
-        public CreateInstallationResponse(BunqEntity[] entities)
+        public Installation(BunqEntity[] entities)
         {
             Id = entities.OfType<Id>().First();
             Token = entities.OfType<Token>().First();
