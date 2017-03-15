@@ -21,5 +21,19 @@ namespace Sycade.BunqApi.Endpoints
 
             return entities.Cast<Id>().First();
         }
+
+        public async Task<Payment[]> GetAllAsync(int monetaryAccountId, Session session)
+        {
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}/payment", session.Token);
+
+            return entities.Cast<Payment>().ToArray();
+        }
+
+        public async Task<Payment> GetByIdAsync(int paymentId, int monetaryAccountId, Session session)
+        {
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}/payment/{paymentId}", session.Token);
+
+            return entities.Cast<Payment>().FirstOrDefault();
+        }
     }
 }

@@ -10,6 +10,6 @@ namespace Sycade.BunqApi.Model
         [JsonProperty("image")]
         public Image[] Images { get; set; }
         [JsonProperty("anchor_uuid")]
-        public Guid AnchorUuid { get; set; }
+        public Guid? AnchorUuid { get; set; }
     }
 }

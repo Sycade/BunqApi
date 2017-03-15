@@ -8,6 +8,8 @@ namespace Sycade.BunqApi.Model
         public string Street { get; set; }
         [JsonProperty("house_number")]
         public string HouseNumber { get; set; }
+        [JsonProperty("po_box")]
+        public string PostOfficeBox { get; set; }
         [JsonProperty("postal_code")]
         public string PostalCode { get; set; }
         [JsonProperty("city")]
