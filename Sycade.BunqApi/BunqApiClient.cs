@@ -21,7 +21,7 @@ namespace Sycade.BunqApi
     /// <summary>
     /// Executes HTTP requests to the bunq API and parses responses.
     /// </summary>
-    public class BunqApiClient
+    public partial class BunqApiClient
     {
         private const string BunqApiUrlFormatString = "https://api.bunq.com/v{0}/{1}";
         private const string BunqSandboxApiUrlFormatString = "https://sandbox.public.api.bunq.com/v{0}/{1}";
@@ -35,14 +35,6 @@ namespace Sycade.BunqApi
 
         internal string ApiKey { get; }
         internal X509Certificate2 ClientCertificate { get; }
-
-        public CardEndpoint Card { get; private set; }
-        public DeviceServerEndpoint DeviceServer { get; private set; }
-        public InstallationEndpoint Installation { get; private set; }
-        public MonetaryAccountBankEndpoint MonetaryAccountBank { get; private set; }
-        public PaymentEndpoint Payment { get; private set; }
-        public SessionEndpoint Session { get; private set; }
-        public SessionServerEndpoint SessionServer { get; private set; }
 
         public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, ServerPublicKey serverPublicKey, bool useSandbox)
         {
@@ -65,17 +57,6 @@ namespace Sycade.BunqApi
         {
             _serverPublicKey = RSA.Create();
             _serverPublicKey.FromPemString(serverPublicKey.Value);
-        }
-
-        private void InitializeEndpoints()
-        {
-            Card = new CardEndpoint(this);
-            DeviceServer = new DeviceServerEndpoint(this);
-            Installation = new InstallationEndpoint(this);
-            MonetaryAccountBank = new MonetaryAccountBankEndpoint(this);
-            Payment = new PaymentEndpoint(this);
-            Session = new SessionEndpoint(this);
-            SessionServer = new SessionServerEndpoint(this);
         }
 
 

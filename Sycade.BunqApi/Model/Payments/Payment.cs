@@ -51,9 +51,9 @@ namespace Sycade.BunqApi.Model
         public string MerchantReference { get; set; }
 
         [JsonProperty("batch_id")]
-        public int BatchId { get; set; }
+        public int? BatchId { get; set; }
         [JsonProperty("scheduled_id")]
-        public int ScheduledId { get; set; }
+        public int? ScheduledId { get; set; }
 
         [JsonProperty("address_shipping")]
         public Address AddressShipping { get; set; }

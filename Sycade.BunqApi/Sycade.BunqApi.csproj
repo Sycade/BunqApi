@@ -45,9 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BunqApiClient.cs" />
+    <Compile Include="BunqApiClientEndpoints.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\DecimalToStringConverter.cs" />
     <Compile Include="Endpoints\CardEndpoint.cs" />
+    <Compile Include="Endpoints\DeviceEndpoint.cs" />
     <Compile Include="Endpoints\DeviceServerEndpoint.cs" />
     <Compile Include="Endpoints\Endpoint.cs" />
     <Compile Include="Endpoints\InstallationEndpoint.cs" />
@@ -66,6 +68,10 @@
     <Compile Include="Model\Cards\CountryPermission.cs" />
     <Compile Include="Model\Currency.cs" />
     <Compile Include="Model\BunqEntity.cs" />
+    <Compile Include="Model\Devices\Device.cs" />
+    <Compile Include="Model\Devices\DevicePhone.cs" />
+    <Compile Include="Model\Devices\DeviceServer.cs" />
+    <Compile Include="Model\Devices\DeviceStatus.cs" />
     <Compile Include="Model\Geolocation.cs" />
     <Compile Include="Model\Payments\LabelUser.cs" />
     <Compile Include="Model\MonetaryAccounts\Limit.cs" />
