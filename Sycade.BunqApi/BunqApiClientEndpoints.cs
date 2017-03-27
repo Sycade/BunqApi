@@ -5,6 +5,7 @@ namespace Sycade.BunqApi
     public partial class BunqApiClient
     {
         public CardEndpoint Card { get; private set; }
+        public CustomerStatementEndpoint CustomerStatement { get; private set; }
         public DeviceEndpoint Device { get; private set; }
         public DeviceServerEndpoint DeviceServer { get; private set; }
         public InstallationEndpoint Installation { get; private set; }
@@ -16,6 +17,7 @@ namespace Sycade.BunqApi
         private void InitializeEndpoints()
         {
             Card = new CardEndpoint(this);
+            CustomerStatement = new CustomerStatementEndpoint(this);
             Device = new DeviceEndpoint(this);
             DeviceServer = new DeviceServerEndpoint(this);
             Installation = new InstallationEndpoint(this);

@@ -8,6 +8,7 @@ using Sycade.BunqApi.Requests;
 using Sycade.BunqApi.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -87,6 +88,19 @@ namespace Sycade.BunqApi
             VerifyResponse(responseMessage, responseContent);
 
             return GetEntities(responseArray);
+        }
+
+        internal async Task<Stream> DoRawApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        {
+            if (_serverPublicKey == null)
+                throw new BunqApiException("Server public key was not set.");
+
+            var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
+            var requestMessage = CreateSignedRequestMessage(method, endpoint, token, requestContent);
+
+            var responseMessage = await SendRequestMessageAsync(requestMessage);
+
+            return await responseMessage.Content.ReadAsStreamAsync();
         }
 
         private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)

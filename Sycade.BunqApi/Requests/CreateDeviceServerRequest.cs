@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System.Linq;
+using System.Net;
 
 namespace Sycade.BunqApi.Requests
 {
@@ -6,11 +8,10 @@ namespace Sycade.BunqApi.Requests
     {
         [JsonProperty("description")]
         public string Description { get; }
-
         [JsonProperty("secret")]
         public string Secret { get; }
 
-        public CreateDeviceServerRequest(string description, string secret)
+        internal CreateDeviceServerRequest(string description, string secret)
         {
             Description = description;
             Secret = secret;
