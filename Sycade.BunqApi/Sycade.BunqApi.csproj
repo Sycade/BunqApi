@@ -69,8 +69,10 @@
     <Compile Include="Model\Cards\CountryPermission.cs" />
     <Compile Include="Model\Currency.cs" />
     <Compile Include="Model\BunqEntity.cs" />
-    <Compile Include="Model\CustomerStatementFormat.cs" />
-    <Compile Include="Model\CustomerStatementRegionalFormat.cs" />
+    <Compile Include="Model\CustomerStatements\CustomerStatement.cs" />
+    <Compile Include="Model\CustomerStatements\CustomerStatementFormat.cs" />
+    <Compile Include="Model\CustomerStatements\CustomerStatementRegionalFormat.cs" />
+    <Compile Include="Model\CustomerStatements\CustomerStatementStatus.cs" />
     <Compile Include="Model\Devices\Device.cs" />
     <Compile Include="Model\Devices\DevicePhone.cs" />
     <Compile Include="Model\Devices\DeviceServer.cs" />

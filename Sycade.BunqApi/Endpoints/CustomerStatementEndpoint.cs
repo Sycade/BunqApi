@@ -3,6 +3,7 @@ using Sycade.BunqApi.Requests;
 using Sycade.BunqApi.Responses;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -35,6 +36,13 @@ namespace Sycade.BunqApi.Endpoints
             await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}/customer-statement", session.Token, request);
         }
 
+
+        public async Task<CustomerStatement[]> GetAllAsync(int monetaryAccountId, Session session)
+        {
+            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}/customer-statement", session.Token);
+
+            return entities.Cast<CustomerStatement>().ToArray();
+        }
 
         public async Task<Stream> GetContentAsync(int monetaryAccountId, int customerStatementId, Session session)
         {
