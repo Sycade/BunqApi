@@ -1,4 +1,4 @@
-﻿using Sycade.BunqApi.Model;
+﻿using Sycade.BunqApi.Model.CustomerStatements;
 using Sycade.BunqApi.Requests;
 using Sycade.BunqApi.Responses;
 using System;

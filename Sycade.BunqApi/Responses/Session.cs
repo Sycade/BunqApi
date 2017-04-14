@@ -1,4 +1,5 @@
 ﻿using Sycade.BunqApi.Model;
+using Sycade.BunqApi.Model.Users;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Sycade.BunqApi.Responses
 
         public async Task DeleteAsync()
         {
-            await ApiClient.Session.DeleteAsync(this);
+            await ApiClient.Sessions.DeleteAsync(this);
         }
     }
 }

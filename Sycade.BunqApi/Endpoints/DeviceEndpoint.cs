@@ -20,9 +20,7 @@ namespace Sycade.BunqApi.Endpoints
 
         public async Task<Device> GetByIdAsync(int deviceId, Session session)
         {
-            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"device/{deviceId}", session.Token);
-
-            return entities.Cast<Device>().FirstOrDefault();
+            return await ApiClient.DoSignedApiRequestAsync<Device>(HttpMethod.Get, $"device/{deviceId}", session.Token);
         }
     }
 }

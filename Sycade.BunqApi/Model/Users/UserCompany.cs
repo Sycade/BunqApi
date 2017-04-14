@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
+using Sycade.BunqApi.Model.MonetaryAccounts;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Model.Users
 {
     public class UserCompany : User
     {

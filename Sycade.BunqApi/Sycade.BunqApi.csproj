@@ -78,6 +78,8 @@
     <Compile Include="Model\Devices\DeviceServer.cs" />
     <Compile Include="Model\Devices\DeviceStatus.cs" />
     <Compile Include="Model\Geolocation.cs" />
+    <Compile Include="Model\NotificationFilters\NotificationFilterCategory.cs" />
+    <Compile Include="Model\NotificationFilters\NotificationFilterDeliveryMethod.cs" />
     <Compile Include="Model\Payments\LabelUser.cs" />
     <Compile Include="Model\MonetaryAccounts\Limit.cs" />
     <Compile Include="Model\Cards\MagStripePermission.cs" />
@@ -107,7 +109,7 @@
     <Compile Include="Requests\CreateCustomerStatementRequest.cs" />
     <Compile Include="Requests\CreatePaymentRequest.cs" />
     <Compile Include="Responses\Installation.cs" />
-    <Compile Include="Model\NotificationFilter.cs" />
+    <Compile Include="Model\NotificationFilters\NotificationFilter.cs" />
     <Compile Include="Model\ServerPublicKey.cs" />
     <Compile Include="Model\Token.cs" />
     <Compile Include="Model\MonetaryAccounts\UltimateBeneficialOwner.cs" />

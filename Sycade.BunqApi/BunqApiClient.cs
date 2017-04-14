@@ -90,7 +90,14 @@ namespace Sycade.BunqApi
             return GetEntities(responseArray);
         }
 
-        internal async Task<Stream> DoRawApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        internal async Task<TEntity> DoSignedApiRequestAsync<TEntity>(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        {
+            var entities = await DoSignedApiRequestAsync(method, endpoint, token, request);
+
+            return entities.Cast<TEntity>().FirstOrDefault();
+        }
+
+            internal async Task<Stream> DoRawApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
         {
             if (_serverPublicKey == null)
                 throw new BunqApiException("Server public key was not set.");
@@ -192,7 +199,7 @@ namespace Sycade.BunqApi
             var serverSignature = Convert.FromBase64String(serverSignatureHeader);
 
             if (!_serverPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
-                throw new BunqApiException("Server sent an invalid response. Could not verify signature.");
+                throw new BunqApiException("Server sent an invalid response. Signature invalid.");
         }
 
 

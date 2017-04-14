@@ -1,4 +1,5 @@
 ﻿using Sycade.BunqApi.Model;
+using Sycade.BunqApi.Model.Payments;
 using Sycade.BunqApi.Requests;
 using Sycade.BunqApi.Responses;
 using System.Linq;
@@ -17,9 +18,7 @@ namespace Sycade.BunqApi.Endpoints
         {
             var request = new CreatePaymentRequest(amount, to, description);
 
-            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, $"user/{session.User.Id}/monetary-account/{fromAccountId}/payment", session.Token, request);
-
-            return entities.Cast<Id>().First();
+            return await ApiClient.DoSignedApiRequestAsync<Id>(HttpMethod.Post, $"user/{session.User.Id}/monetary-account/{fromAccountId}/payment", session.Token, request);
         }
 
         public async Task<Payment[]> GetAllAsync(int monetaryAccountId, Session session)
@@ -31,9 +30,7 @@ namespace Sycade.BunqApi.Endpoints
 
         public async Task<Payment> GetByIdAsync(int paymentId, int monetaryAccountId, Session session)
         {
-            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}/payment/{paymentId}", session.Token);
-
-            return entities.Cast<Payment>().FirstOrDefault();
+            return await ApiClient.DoSignedApiRequestAsync<Payment>(HttpMethod.Get, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}/payment/{paymentId}", session.Token);
         }
     }
 }

@@ -10,8 +10,10 @@ namespace Sycade.BunqApi.Requests
         public string Description { get; }
         [JsonProperty("secret")]
         public string Secret { get; }
+        [JsonProperty("permitted_ips")]
+        public string[] PermittedIps { get; set; }
 
-        internal CreateDeviceServerRequest(string description, string secret)
+        internal CreateDeviceServerRequest(string description, string secret, string[] permittedIps)
         {
             Description = description;
             Secret = secret;

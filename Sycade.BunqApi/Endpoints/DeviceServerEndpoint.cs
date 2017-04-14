@@ -13,13 +13,11 @@ namespace Sycade.BunqApi.Endpoints
             : base(apiClient) { }
 
 
-        public async Task<Id> CreateAsync(string description, Token installationToken)
+        public async Task<Id> CreateAsync(string description, Token installationToken, params string[] permittedIps)
         {
-            var request = new CreateDeviceServerRequest(description, ApiClient.ApiKey);
+            var request = new CreateDeviceServerRequest(description, ApiClient.ApiKey, permittedIps);
 
-            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, "device-server", installationToken, request);
-
-            return entities.Cast<Id>().First();
+            return await ApiClient.DoSignedApiRequestAsync<Id>(HttpMethod.Post, "device-server", installationToken, request);
         }
     }
 }

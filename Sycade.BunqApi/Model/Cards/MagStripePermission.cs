@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Model.Cards
 {
     public class MagStripePermission : BunqEntity
     {

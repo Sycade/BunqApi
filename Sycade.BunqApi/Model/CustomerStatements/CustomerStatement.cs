@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Model.CustomerStatements
 {
     public class CustomerStatement : BunqEntity
     {
@@ -18,7 +18,6 @@ namespace Sycade.BunqApi.Model
         public DateTime DateEnd { get; set; }
 
         [JsonProperty("status")]
-        //[JsonConverter(typeof(EnumToStringConverter))]
         public string Status { get; set; }
     }
 }

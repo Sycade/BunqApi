@@ -1,4 +1,4 @@
-﻿using Sycade.BunqApi.Model;
+﻿using Sycade.BunqApi.Model.MonetaryAccounts;
 using Sycade.BunqApi.Responses;
 using System.Linq;
 using System.Net.Http;
@@ -14,9 +14,7 @@ namespace Sycade.BunqApi.Endpoints
 
         public async Task<MonetaryAccount> GetByIdAsync(int monetaryAccountId, Session session)
         {
-            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}", session.Token);
-
-            return entities.Cast<MonetaryAccount>().First();
+            return await ApiClient.DoSignedApiRequestAsync<MonetaryAccount>(HttpMethod.Get, $"user/{session.User.Id}/monetary-account/{monetaryAccountId}", session.Token);
         }
 
         public async Task<MonetaryAccount[]> GetAllAsync(Session session)

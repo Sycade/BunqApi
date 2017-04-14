@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Sycade.BunqApi.Converters;
+using Sycade.BunqApi.Model.MonetaryAccounts;
 using System;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Model.Cards
 {
     public class CardDebit : BunqEntity
     {

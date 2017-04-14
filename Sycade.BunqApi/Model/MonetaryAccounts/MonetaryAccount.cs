@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Sycade.BunqApi.Converters;
+using Sycade.BunqApi.Model.NotificationFilters;
 using System;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Model.MonetaryAccounts
 {
     public abstract class MonetaryAccount : BunqEntity
     {

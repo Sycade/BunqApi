@@ -1,4 +1,4 @@
-﻿namespace Sycade.BunqApi.Model
+﻿namespace Sycade.BunqApi.Model.MonetaryAccounts
 {
     public enum MonetaryAccountSubStatus
     {

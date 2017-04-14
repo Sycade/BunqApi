@@ -2,7 +2,7 @@
 using Sycade.BunqApi.Converters;
 using System;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Model.Payments
 {
     public class Payment : BunqEntity
     {

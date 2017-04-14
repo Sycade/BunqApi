@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sycade.BunqApi.Converters;
-using Sycade.BunqApi.Model;
+using Sycade.BunqApi.Model.CustomerStatements;
 using System;
 
 namespace Sycade.BunqApi.Requests

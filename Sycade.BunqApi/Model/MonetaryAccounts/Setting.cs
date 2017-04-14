@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Sycade.BunqApi.Model
+namespace Sycade.BunqApi.Model.MonetaryAccounts
 {
     public class Setting : BunqEntity
     {

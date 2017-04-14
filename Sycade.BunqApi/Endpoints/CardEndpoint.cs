@@ -1,4 +1,4 @@
-﻿using Sycade.BunqApi.Model;
+﻿using Sycade.BunqApi.Model.Cards;
 using Sycade.BunqApi.Responses;
 using System.Linq;
 using System.Net.Http;
@@ -14,9 +14,7 @@ namespace Sycade.BunqApi.Endpoints
 
         public async Task<CardDebit> GetByIdAsync(int cardId, Session session)
         {
-            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/card/{cardId}", session.Token);
-
-            return entities.Cast<CardDebit>().FirstOrDefault();
+            return await ApiClient.DoSignedApiRequestAsync<CardDebit>(HttpMethod.Get, $"user/{session.User.Id}/card/{cardId}", session.Token);
         }
 
         public async Task<CardDebit[]> GetAllAsync(Session session)
