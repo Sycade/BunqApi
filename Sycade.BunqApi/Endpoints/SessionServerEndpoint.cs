@@ -12,9 +12,9 @@ namespace Sycade.BunqApi.Endpoints
             : base(apiClient) { }
 
 
-        public async Task<Session> CreateSessionAsync(Token installationToken)
+        public async Task<Session> CreateSessionAsync(string apiKey, Token installationToken)
         {
-            var request = new CreateSessionServerRequest(ApiClient.ApiKey);
+            var request = new CreateSessionServerRequest(apiKey);
 
             var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Post, "session-server", installationToken, request);
             var response = new Session(entities);

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Sycade.BunqApi.Endpoints;
 using Sycade.BunqApi.Exceptions;
 using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
@@ -13,15 +12,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Sycade.BunqApi
 {
-    /// <summary>
-    /// Executes HTTP requests to the bunq API and parses responses.
-    /// </summary>
     public partial class BunqApiClient
     {
         private const string BunqApiUrlFormatString = "https://api.bunq.com/v{0}/{1}";
@@ -31,16 +26,13 @@ namespace Sycade.BunqApi
         private const string ClientSignatureHeaderName = "X-Bunq-Client-Signature";
         private const string ServerSignatureHeaderName = "X-Bunq-Server-Signature";
 
+        private RSA _clientPrivateKey;
         private RSA _serverPublicKey;
         private string _urlFormatString;
 
-        internal string ApiKey { get; }
-        internal X509Certificate2 ClientCertificate { get; }
-
-        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, ServerPublicKey serverPublicKey, bool useSandbox)
+        public BunqApiClient(RSA clientPrivateKey, ServerPublicKey serverPublicKey, bool useSandbox)
         {
-            ApiKey = apiKey;
-            ClientCertificate = clientCertificate;
+            _clientPrivateKey = clientPrivateKey;
 
             _urlFormatString = useSandbox ? BunqSandboxApiUrlFormatString : BunqApiUrlFormatString;
 
@@ -50,14 +42,13 @@ namespace Sycade.BunqApi
             InitializeEndpoints();
         }
 
-        public BunqApiClient(string apiKey, X509Certificate2 clientCertificate, bool useSandbox)
-            : this(apiKey, clientCertificate, null, useSandbox) { }
+        public BunqApiClient(RSA clientPrivateKey, bool useSandbox)
+            : this(clientPrivateKey, null, useSandbox) { }
 
 
         public void SetServerPublicKey(ServerPublicKey serverPublicKey)
         {
-            _serverPublicKey = RSA.Create();
-            _serverPublicKey.FromPemString(serverPublicKey.Value);
+            _serverPublicKey = RSAExtensions.FromPublicKeyPemString(serverPublicKey.Value);
         }
 
 
@@ -97,7 +88,7 @@ namespace Sycade.BunqApi
             return entities.Cast<TEntity>().FirstOrDefault();
         }
 
-            internal async Task<Stream> DoRawApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        internal async Task<Stream> DoRawApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
         {
             if (_serverPublicKey == null)
                 throw new BunqApiException("Server public key was not set.");
@@ -158,7 +149,7 @@ namespace Sycade.BunqApi
             builder.Append(content);
 
             var builderBytes = Encoding.UTF8.GetBytes(builder.ToString());
-            var clientSignature = ClientCertificate.GetRSAPrivateKey().SignData(builderBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            var clientSignature = _clientPrivateKey.SignData(builderBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 
             requestMessage.Headers.Add(ClientSignatureHeaderName, Convert.ToBase64String(clientSignature));
         }
