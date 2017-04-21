@@ -10,35 +10,35 @@ To use the .NET bunq API client, you need:
 ### Create a new Installation and execute a payment
 
 ```csharp
-var clientCertificate = new X509Certificate2("your-certificate.pfx", "your-pvk-password");
+var rsaKeyPair = new RSACng(2048); // Generate a key pair or load one
 var useSandbox = true;
 
-var bunq = new BunqApiClient("your-api-key", clientCertificate, useSandbox);
+var bunq = new BunqApiClient(rsaKeyPair, useSandbox);
 
 // Link your API key to this IP address
-var installation = await bunq.Installation.CreateAsync();
+var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
 bunq.SetServerPublicKey(installation.ServerPublicKey);
 
-var deviceServer = await bunq.DeviceServer.CreateAsync("My First DeviceServer", installation.Token);
-var session = await bunq.SessionServer.CreateSessionAsync(installation.Token);
+var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
+var session = await bunq.SessionServers.CreateSessionAsync("your-api-key", installation.Token);
 
 // Get all bank accounts for the User
-var accounts = await bunq.MonetaryAccountBank.ListAsync(session);
+var accounts = await bunq.MonetaryAccountBanks.GetAllAsync(session);
 
 // Pay 25 euros from the first account to the second
-var paymentId = await accounts[0].CreatePaymentAsync(new Amount(Currency.EUR, 25m), accounts[1], "My First Payment", session);
+var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment", session);
 ```
 ### Reuse an existing installation
 ```csharp
-var clientCertificate = new X509Certificate2("your-certificate.pfx", "your-pvk-password");
+var rsaKeyPair = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPrivateBlob)); // Load your private key here
 
-var serverPublicKey = new ServerPublicKey(File.ReadAllText("the-server-public-key.crt"));
-var installationToken = new Token(File.ReadAllText("the-installation-token.txt"));
+var serverPublicKey = new ServerPublicKey(File.ReadAllText("the-server-public-key.crt")); // Load the server public key
+var installationToken = new Token(File.ReadAllText("the-installation-token.txt")); // Load your installation token
 
 var useSandbox = true;
 
-var bunq = new BunqApiClient("your-api-key", clientCertificate, serverPublicKey, useSandbox);
+var bunq = new BunqApiClient(rsaKeyPair, serverPublicKey, useSandbox);
 
-var session = await bunq.SessionServer.CreateSessionAsync(installationToken);
+var session = await bunq.SessionServers.CreateSessionAsync("your-api-key", installationToken);
 // ... Use your session
 ```

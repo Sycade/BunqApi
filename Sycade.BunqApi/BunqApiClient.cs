@@ -9,8 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,17 +29,17 @@ namespace Sycade.BunqApi
         private const string ServerSignatureHeaderName = "X-Bunq-Server-Signature";
 
         private RSA _clientPrivateKey;
-        private RSA _serverPublicKey;
         private string _urlFormatString;
 
-        public BunqApiClient(RSA clientPrivateKey, ServerPublicKey serverPublicKey, bool useSandbox)
+        public RSA ServerPublicKey { get; private set; }
+
+        public BunqApiClient(RSA clientPrivateKey, RSA serverPublicKey, bool useSandbox)
         {
+            ServerPublicKey = serverPublicKey;
+
             _clientPrivateKey = clientPrivateKey;
 
             _urlFormatString = useSandbox ? BunqSandboxApiUrlFormatString : BunqApiUrlFormatString;
-
-            if (serverPublicKey != null)
-                SetServerPublicKey(serverPublicKey);
 
             InitializeEndpoints();
         }
@@ -48,7 +50,7 @@ namespace Sycade.BunqApi
 
         public void SetServerPublicKey(ServerPublicKey serverPublicKey)
         {
-            _serverPublicKey = RSAExtensions.FromPublicKeyPemString(serverPublicKey.Value);
+            ServerPublicKey = RSAExtensions.FromPublicKeyPemString(serverPublicKey.Value);
         }
 
 
@@ -64,9 +66,9 @@ namespace Sycade.BunqApi
             return GetEntities(responseArray);
         }
 
-        internal async Task<BunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        internal async Task<BunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, object request = null)
         {
-            if (_serverPublicKey == null)
+            if (ServerPublicKey == null)
                 throw new BunqApiException("Server public key was not set.");
 
             var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
@@ -81,16 +83,16 @@ namespace Sycade.BunqApi
             return GetEntities(responseArray);
         }
 
-        internal async Task<TEntity> DoSignedApiRequestAsync<TEntity>(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        internal async Task<TEntity> DoSignedApiRequestAsync<TEntity>(HttpMethod method, string endpoint, Token token, object request = null)
         {
             var entities = await DoSignedApiRequestAsync(method, endpoint, token, request);
 
             return entities.Cast<TEntity>().FirstOrDefault();
         }
 
-        internal async Task<Stream> DoRawApiRequestAsync(HttpMethod method, string endpoint, Token token, IBunqApiRequest request = null)
+        internal async Task<Stream> DoRawApiRequestAsync(HttpMethod method, string endpoint, Token token, object request = null)
         {
-            if (_serverPublicKey == null)
+            if (ServerPublicKey == null)
                 throw new BunqApiException("Server public key was not set.");
 
             var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
@@ -99,6 +101,18 @@ namespace Sycade.BunqApi
             var responseMessage = await SendRequestMessageAsync(requestMessage);
 
             return await responseMessage.Content.ReadAsStreamAsync();
+        }
+
+        internal async Task<BunqEntity[]> DoUpdatePropertyRequestAsync<TObject, TProperty>(string endpoint, Expression<Func<TObject, TProperty>> property, object value, Token token)
+        {
+            var jsonPropAttr = ((MemberExpression)property.Body).Member.GetCustomAttribute<JsonPropertyAttribute>();
+
+            var updatedFields = new Dictionary<string, object>
+            {
+                [jsonPropAttr.PropertyName] = value
+            };
+
+            return await DoSignedApiRequestAsync(HttpMethod.Put, endpoint, token, updatedFields);
         }
 
         private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)
@@ -189,13 +203,12 @@ namespace Sycade.BunqApi
             var builderBytes = Encoding.UTF8.GetBytes(builder.ToString());
             var serverSignature = Convert.FromBase64String(serverSignatureHeader);
 
-            if (!_serverPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
+            if (!ServerPublicKey.VerifyData(builderBytes, serverSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
                 throw new BunqApiException("Server sent an invalid response. Signature invalid.");
         }
 
-
         private BunqEntity[] GetEntities(JArray responseArray)
-        { 
+        {
             var entities = new List<BunqEntity>();
 
             foreach (var element in responseArray.Cast<JObject>())
