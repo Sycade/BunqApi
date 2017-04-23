@@ -2,9 +2,7 @@
 A .NET bunq API client written in C# by Sycade.
 
 ## Requirements
-To use the .NET bunq API client, you need:
-- an API key (created in the Bunq Android (Sandbox) or iOS app;
-- a PKCS #12 (.pfx) file with exportable private key (can be self-signed) for API request signing.
+To use the .NET bunq API client, you just need an API key (created in the Bunq Android (Sandbox) or iOS app!
 
 ## Example
 ### Create a new Installation and execute a payment
@@ -20,7 +18,7 @@ var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
 bunq.SetServerPublicKey(installation.ServerPublicKey);
 
 var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
-var session = await bunq.SessionServers.CreateSessionAsync("your-api-key", installation.Token);
+var session = await bunq.Sessions.CreateAsync("your-api-key", installation.Token);
 
 // Get all bank accounts for the User
 var accounts = await bunq.MonetaryAccountBanks.GetAllAsync(session);
@@ -31,14 +29,14 @@ var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Cur
 ### Reuse an existing installation
 ```csharp
 var rsaKeyPair = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPrivateBlob)); // Load your private key here
+var serverPublicKey = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPublicBlob)); // Load the server public key
 
-var serverPublicKey = new ServerPublicKey(File.ReadAllText("the-server-public-key.crt")); // Load the server public key
 var installationToken = new Token(File.ReadAllText("the-installation-token.txt")); // Load your installation token
 
 var useSandbox = true;
 
 var bunq = new BunqApiClient(rsaKeyPair, serverPublicKey, useSandbox);
 
-var session = await bunq.SessionServers.CreateSessionAsync("your-api-key", installationToken);
+var session = await bunq.Sessions.CreateAsync("your-api-key", installationToken);
 // ... Use your session
 ```
