@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Sycade.BunqApi.Model.Payments
+namespace Sycade.BunqApi.Model.Users
 {
     public class LabelUser : BunqEntity
     {

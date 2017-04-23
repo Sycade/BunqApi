@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sycade.BunqApi.Converters;
-using Sycade.BunqApi.Model.Payments;
+using Sycade.BunqApi.Model.Users;
 using System;
 
 namespace Sycade.BunqApi.Model.Cards

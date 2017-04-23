@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Sycade.BunqApi.Model.Cards;
+using Sycade.BunqApi.Model.MonetaryAccounts;
 using System;
 
-namespace Sycade.BunqApi.Model.Payments
+namespace Sycade.BunqApi.Model.Cards
 {
     public class MasterCardAction : BunqEntity
     {

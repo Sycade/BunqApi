@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Sycade.BunqApi.Model.Users;
 
-namespace Sycade.BunqApi.Model.Payments
+namespace Sycade.BunqApi.Model.MonetaryAccounts
 {
     public class LabelMonetaryAccount : BunqEntity
     {

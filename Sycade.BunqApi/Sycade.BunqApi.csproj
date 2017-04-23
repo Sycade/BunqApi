@@ -86,7 +86,7 @@
     <Compile Include="Model\NotificationFilters\NotificationFilterCategory.cs" />
     <Compile Include="Model\NotificationFilters\NotificationFilterDeliveryMethod.cs" />
     <Compile Include="Model\NotificationFilters\NotificationUrl.cs" />
-    <Compile Include="Model\Payments\LabelUser.cs" />
+    <Compile Include="Model\Users\LabelUser.cs" />
     <Compile Include="Model\MonetaryAccounts\Limit.cs" />
     <Compile Include="Model\Cards\MagStripePermission.cs" />
     <Compile Include="Model\MonetaryAccounts\MonetaryAccount.cs" />
@@ -103,9 +103,9 @@
     <Compile Include="Model\MonetaryAccounts\MonetaryAccountProfile.cs" />
     <Compile Include="Model\MonetaryAccounts\MonetaryAccountStatus.cs" />
     <Compile Include="Model\MonetaryAccounts\MonetaryAccountSubStatus.cs" />
-    <Compile Include="Model\Payments\MasterCardAction.cs" />
+    <Compile Include="Model\Cards\MasterCardAction.cs" />
     <Compile Include="Model\Payments\Payment.cs" />
-    <Compile Include="Model\Payments\LabelMonetaryAccount.cs" />
+    <Compile Include="Model\MonetaryAccounts\LabelMonetaryAccount.cs" />
     <Compile Include="Model\Payments\PaymentSubType.cs" />
     <Compile Include="Model\Payments\PaymentType.cs" />
     <Compile Include="Model\MonetaryAccounts\Setting.cs" />
