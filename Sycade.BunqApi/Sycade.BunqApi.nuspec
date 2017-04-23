@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Sycade.BunqApi</id>
+    <version>1.0.0</version>
+    <description>API client for the bunq public API.</description>
+    <authors>Sycade B.V.</authors>
+
+    <dependencies>
+      <dependency id="BouncyCastle" version="[1.8.1,1.9.0)" />
+      <dependency id="Newtonsoft.Json" version="[10.0.2,10.1.0)" />
+    </dependencies>
+  </metadata>
+
+  <files>
+    <file src="bin\Release\Sycade.BunqApi.dll" target="lib\net462" />
+  </files>
+</package>
