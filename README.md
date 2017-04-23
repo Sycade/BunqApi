@@ -4,6 +4,9 @@ A .NET bunq API client written in C# by Sycade.
 ## Requirements
 To use the .NET bunq API client, you just need an API key (created in the Bunq Android (Sandbox) or iOS app!
 
+## Installation
+Get the package from [nuget](https://www.nuget.org/packages/Sycade.BunqApi/) or clone the repository and build it yourself.
+
 ## Example
 ### Create a new Installation and execute a payment
 
