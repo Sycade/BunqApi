@@ -5,7 +5,7 @@ namespace Sycade.BunqApi.Model
     public class Attachment : BunqEntity
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("content_type")]

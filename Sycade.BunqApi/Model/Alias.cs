@@ -15,9 +15,10 @@ namespace Sycade.BunqApi.Model
 
         internal Alias() { }
 
-        public Alias(string ibanNumber)
+        public Alias(string name, string ibanNumber)
         {
             Type = AliasType.IBAN;
+            Name = name;
             Value = ibanNumber;
         }
 

@@ -6,7 +6,7 @@ namespace Sycade.BunqApi.Model
     public class Token : BunqEntity
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [JsonProperty("token")]
         public string Value { get; set; }
         [JsonProperty("created")]

@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Model.MonetaryAccounts
     public abstract class MonetaryAccount : BunqEntity
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [JsonProperty("created")]
         public DateTime Created { get; set; }
         [JsonProperty("updated")]
@@ -50,7 +50,7 @@ namespace Sycade.BunqApi.Model.MonetaryAccounts
         public string Timezone { get; set; }
 
         [JsonProperty("user_id")]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         [JsonProperty("monetary_account_profile")]
         public MonetaryAccountProfile MonetaryAccountProfile { get; set; }

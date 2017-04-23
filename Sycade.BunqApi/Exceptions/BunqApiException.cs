@@ -6,6 +6,7 @@ namespace Sycade.BunqApi.Exceptions
     public class BunqApiException : Exception
     {
         public string TranslatedMessage { get; set; }
+        public string Json { get; set; }
 
         public BunqApiException(Error error)
             : base(error.ErrorDescription)

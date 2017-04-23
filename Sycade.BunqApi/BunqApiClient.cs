@@ -63,7 +63,7 @@ namespace Sycade.BunqApi
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
             var responseArray = ParseResponse(responseMessage, responseContent);
 
-            return GetEntities(responseArray);
+            return GetEntities(responseArray, responseContent);
         }
 
         internal async Task<BunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, object request = null)
@@ -80,7 +80,7 @@ namespace Sycade.BunqApi
 
             VerifyResponse(responseMessage, responseContent);
 
-            return GetEntities(responseArray);
+            return GetEntities(responseArray, responseContent);
         }
 
         internal async Task<TEntity> DoSignedApiRequestAsync<TEntity>(HttpMethod method, string endpoint, Token token, object request = null)
@@ -207,7 +207,7 @@ namespace Sycade.BunqApi
                 throw new BunqApiException("Server sent an invalid response. Signature invalid.");
         }
 
-        private BunqEntity[] GetEntities(JArray responseArray)
+        private BunqEntity[] GetEntities(JArray responseArray, string content)
         {
             var entities = new List<BunqEntity>();
 

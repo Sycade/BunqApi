@@ -6,6 +6,8 @@ namespace Sycade.BunqApi.Model.Payments
     {
         [JsonProperty("iban")]
         public string Iban { get; set; }
+        [JsonProperty("is_light")]
+        public bool? IsLight { get; set; }
         [JsonProperty("display_name")]
         public string DisplayName { get; set; }
         [JsonProperty("avatar")]

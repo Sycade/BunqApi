@@ -6,7 +6,7 @@ namespace Sycade.BunqApi.Model.Payments
     public class LabelUser : BunqEntity
     {
         [JsonProperty("uuid")]
-        public Guid Uuid { get; set; }
+        public Guid? Uuid { get; set; }
 
         [JsonProperty("avatar")]
         public Avatar Avatar { get; set; }

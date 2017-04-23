@@ -70,6 +70,7 @@
     <Compile Include="Model\Cards\CardDebitOrderStatus.cs" />
     <Compile Include="Model\Cards\CardDebitStatus.cs" />
     <Compile Include="Model\Cards\CountryPermission.cs" />
+    <Compile Include="Model\Cards\LabelCard.cs" />
     <Compile Include="Model\Currency.cs" />
     <Compile Include="Model\BunqEntity.cs" />
     <Compile Include="Model\CustomerStatements\CustomerStatement.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="Model\Devices\DeviceServer.cs" />
     <Compile Include="Model\Devices\DeviceStatus.cs" />
     <Compile Include="Model\Geolocation.cs" />
+    <Compile Include="Model\MonetaryAccounts\Issuer.cs" />
+    <Compile Include="Model\MonetaryAccounts\MonetaryAccountProfileFill.cs" />
     <Compile Include="Model\NotificationFilters\NotificationFilterCategory.cs" />
     <Compile Include="Model\NotificationFilters\NotificationFilterDeliveryMethod.cs" />
     <Compile Include="Model\NotificationFilters\NotificationUrl.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="Model\MonetaryAccounts\MonetaryAccountProfile.cs" />
     <Compile Include="Model\MonetaryAccounts\MonetaryAccountStatus.cs" />
     <Compile Include="Model\MonetaryAccounts\MonetaryAccountSubStatus.cs" />
+    <Compile Include="Model\Payments\MasterCardAction.cs" />
     <Compile Include="Model\Payments\Payment.cs" />
     <Compile Include="Model\Payments\LabelMonetaryAccount.cs" />
     <Compile Include="Model\Payments\PaymentSubType.cs" />

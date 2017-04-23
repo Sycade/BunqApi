@@ -8,7 +8,7 @@ namespace Sycade.BunqApi.Model.Users
     public abstract class User : BunqEntity
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [JsonProperty("created")]
         public DateTime Created { get; set; }
         [JsonProperty("updated")]

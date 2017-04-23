@@ -5,7 +5,7 @@ namespace Sycade.BunqApi.Model.MonetaryAccounts
     public class MonetaryAccountProfile : BunqEntity
     {
         [JsonProperty("profile_fill")]
-        public string ProfileFill { get; set; }
+        public MonetaryAccountProfileFill ProfileFill { get; set; }
         [JsonProperty("profile_drain")]
         public string ProfileDrain { get; set; }
         [JsonProperty("profile_action_required")]

@@ -21,5 +21,10 @@ namespace Sycade.BunqApi.Endpoints
 
             return response;
         }
+
+        public async Task<Session> CreateSessionAsync(string apiKey, string installationToken)
+        {
+            return await CreateSessionAsync(apiKey, new Token(installationToken));
+        }
     }
 }

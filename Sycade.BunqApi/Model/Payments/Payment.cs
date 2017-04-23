@@ -7,17 +7,17 @@ namespace Sycade.BunqApi.Model.Payments
     public class Payment : BunqEntity
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [JsonProperty("created")]
         public DateTime Created { get; set; }
         [JsonProperty("updated")]
         public DateTime Updated { get; set; }
 
         [JsonProperty("monetary_account_id")]
-        public int MonetaryAccountId { get; set; }
+        public long MonetaryAccountId { get; set; }
         [JsonProperty("amount")]
-
         public Amount Amount { get; set; }
+
         [JsonProperty("alias")]
         public LabelMonetaryAccount Alias { get; set; }
         [JsonProperty("counterparty_alias")]
@@ -31,7 +31,7 @@ namespace Sycade.BunqApi.Model.Payments
         public PaymentType Type { get; set; }
         [JsonProperty("sub_type")]
         [JsonConverter(typeof(EnumToStringConverter))]
-        public PaymentSubType SubType { get; set; }
+        public PaymentSubType? SubType { get; set; }
 
         [JsonProperty("bunqto_status")]
         public string BunqToStatus { get; set; }

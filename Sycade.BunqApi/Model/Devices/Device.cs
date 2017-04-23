@@ -7,7 +7,7 @@ namespace Sycade.BunqApi.Model.Devices
     public class Device : BunqEntity
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [JsonProperty("created")]
         public DateTime Created { get; set; }
         [JsonProperty("updated")]
