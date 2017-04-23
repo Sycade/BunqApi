@@ -62,7 +62,6 @@
     <Compile Include="Endpoints\PaymentEndpoint.cs" />
     <Compile Include="Endpoints\RequestInquiryEndpoint.cs" />
     <Compile Include="Endpoints\SessionEndpoint.cs" />
-    <Compile Include="Endpoints\SessionServerEndpoint.cs" />
     <Compile Include="Exceptions\BunqApiException.cs" />
     <Compile Include="Model\AliasType.cs" />
     <Compile Include="Model\Attachment.cs" />
@@ -125,7 +124,7 @@
     <Compile Include="Requests\CreateDeviceServerRequest.cs" />
     <Compile Include="Requests\CreateInstallationRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\CreateSessionServerRequest.cs" />
+    <Compile Include="Requests\CreateSessionRequest.cs" />
     <Compile Include="Requests\IBunqApiRequest.cs" />
     <Compile Include="Responses\Session.cs" />
     <Compile Include="Utilities\BigEndianBitConverter.cs" />

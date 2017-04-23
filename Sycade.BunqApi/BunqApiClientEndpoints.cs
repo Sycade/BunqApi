@@ -12,7 +12,6 @@ namespace Sycade.BunqApi
         public MonetaryAccountBankEndpoint MonetaryAccountBanks { get; private set; }
         public PaymentEndpoint Payments { get; private set; }
         public SessionEndpoint Sessions { get; private set; }
-        public SessionServerEndpoint SessionServers { get; private set; }
 
         private void InitializeEndpoints()
         {
@@ -24,7 +23,6 @@ namespace Sycade.BunqApi
             MonetaryAccountBanks = new MonetaryAccountBankEndpoint(this);
             Payments = new PaymentEndpoint(this);
             Sessions = new SessionEndpoint(this);
-            SessionServers = new SessionServerEndpoint(this);
         }
     }
 }
