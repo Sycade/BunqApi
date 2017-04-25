@@ -18,9 +18,11 @@ namespace Sycade.BunqApi.Endpoints
             var request = new CreateInstallationRequest(clientPublicKey.ToPublicKeyPemString());
 
             var entities = await ApiClient.DoApiRequestAsync(HttpMethod.Post, "installation", request);
-            var response = new Installation(entities);
+            var installation = new Installation(entities);
 
-            return response;
+            ApiClient.SetServerPublicKey(installation.ServerPublicKey);
+
+            return installation;
         }
     }
 }

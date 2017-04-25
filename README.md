@@ -16,11 +16,11 @@ var useSandbox = true;
 
 var bunq = new BunqApiClient(rsaKeyPair, useSandbox);
 
-// Link your API key to this IP address
+// Link your API key to this IP address and create a device server
 var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
-bunq.SetServerPublicKey(installation.ServerPublicKey);
-
 var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
+
+// Open a session
 var session = await bunq.Sessions.CreateAsync("your-api-key", installation.Token);
 
 // Get all bank accounts for the User
@@ -34,7 +34,7 @@ var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Cur
 var rsaKeyPair = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPrivateBlob)); // Load your private key here
 var serverPublicKey = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPublicBlob)); // Load the server public key
 
-var installationToken = new Token(File.ReadAllText("the-installation-token.txt")); // Load your installation token
+var installationToken = File.ReadAllText("the-installation-token.txt"); // Load your installation token
 
 var useSandbox = true;
 

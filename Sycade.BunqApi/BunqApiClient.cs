@@ -50,7 +50,7 @@ namespace Sycade.BunqApi
             : this(clientPrivateKey, null, useSandbox) { }
 
 
-        public void SetServerPublicKey(ServerPublicKey serverPublicKey)
+        internal void SetServerPublicKey(ServerPublicKey serverPublicKey)
         {
             ServerPublicKey = RSAExtensions.FromPublicKeyPemString(serverPublicKey.Value);
         }

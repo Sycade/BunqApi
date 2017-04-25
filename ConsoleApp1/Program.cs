@@ -13,38 +13,37 @@ namespace ConsoleApp1
 
         static async void CreateDeviceServer()
         {
-var rsaKeyPair = new RSACng(2048); // Generate a key pair or load one
-var useSandbox = true;
+            var rsaKeyPair = new RSACng(2048); // Generate a key pair or load one
+            var useSandbox = true;
 
-var bunq = new BunqApiClient(rsaKeyPair, useSandbox);
+            var bunq = new BunqApiClient(rsaKeyPair, useSandbox);
 
-// Link your API key to this IP address
-var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
-bunq.SetServerPublicKey(installation.ServerPublicKey);
+            // Link your API key to this IP address
+            var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
 
-var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
-var session = await bunq.Sessions.CreateAsync("your-api-key", installation.Token);
+            var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
+            var session = await bunq.Sessions.CreateAsync("your-api-key", installation.Token);
 
-// Get all bank accounts for the User
-var accounts = await bunq.MonetaryAccountBanks.GetAllAsync(session);
+            // Get all bank accounts for the User
+            var accounts = await bunq.MonetaryAccountBanks.GetAllAsync(session);
 
-// Pay 25 euros from the first account to the second
-var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment", session);
+            // Pay 25 euros from the first account to the second
+            var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment", session);
         }
 
         static async void ReloadDeviceServer()
         {
-var rsaKeyPair = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPrivateBlob)); // Load your private key here
-var serverPublicKey = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPublicBlob)); // Load the server public key
+            var rsaKeyPair = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPrivateBlob)); // Load your private key here
+            var serverPublicKey = new RSACng(CngKey.Import(new byte[0], CngKeyBlobFormat.GenericPublicBlob)); // Load the server public key
 
-var installationToken = new Token(File.ReadAllText("the-installation-token.txt")); // Load your installation token
+            var installationToken = new Token(File.ReadAllText("the-installation-token.txt")); // Load your installation token
 
-var useSandbox = true;
+            var useSandbox = true;
 
-var bunq = new BunqApiClient(rsaKeyPair, serverPublicKey, useSandbox);
+            var bunq = new BunqApiClient(rsaKeyPair, serverPublicKey, useSandbox);
 
-var session = await bunq.Sessions.CreateAsync("your-api-key", installationToken);
-// ... Use your session
+            var session = await bunq.Sessions.CreateAsync("your-api-key", installationToken);
+            // ... Use your session
         }
     }
 }
