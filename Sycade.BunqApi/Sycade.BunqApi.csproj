@@ -127,7 +127,6 @@
     <Compile Include="Requests\CreateSessionRequest.cs" />
     <Compile Include="Requests\IBunqApiRequest.cs" />
     <Compile Include="Responses\Session.cs" />
-    <Compile Include="Utilities\BigEndianBitConverter.cs" />
     <Compile Include="Utilities\EntityTypeCollection.cs" />
     <Compile Include="Utilities\NotificationUrlParser.cs" />
   </ItemGroup>

@@ -28,6 +28,8 @@ namespace Sycade.BunqApi
         private const string ClientSignatureHeaderName = "X-Bunq-Client-Signature";
         private const string ServerSignatureHeaderName = "X-Bunq-Server-Signature";
 
+        private static HttpClient _httpClient = new HttpClient();
+
         private RSA _clientPrivateKey;
         private string _urlFormatString;
 
@@ -117,8 +119,7 @@ namespace Sycade.BunqApi
 
         private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)
         {
-            using (var httpClient = new HttpClient())
-                return await httpClient.SendAsync(requestMessage);
+            return await _httpClient.SendAsync(requestMessage);
         }
 
 
