@@ -57,6 +57,7 @@
     <Compile Include="Endpoints\DeviceServerEndpoint.cs" />
     <Compile Include="Endpoints\Endpoint.cs" />
     <Compile Include="Endpoints\InstallationEndpoint.cs" />
+    <Compile Include="Endpoints\InvoiceEndpoint.cs" />
     <Compile Include="Endpoints\MonetaryAccountBankEndpoint.cs" />
     <Compile Include="Endpoints\MonetaryAccountEndpoint.cs" />
     <Compile Include="Endpoints\PaymentEndpoint.cs" />
@@ -81,6 +82,10 @@
     <Compile Include="Model\Devices\DeviceServer.cs" />
     <Compile Include="Model\Devices\DeviceStatus.cs" />
     <Compile Include="Model\Geolocation.cs" />
+    <Compile Include="Model\Invoices\Invoice.cs" />
+    <Compile Include="Model\Invoices\InvoiceAlias.cs" />
+    <Compile Include="Model\Invoices\InvoiceGroup.cs" />
+    <Compile Include="Model\Invoices\InvoiceGroupItem.cs" />
     <Compile Include="Model\MonetaryAccounts\Issuer.cs" />
     <Compile Include="Model\MonetaryAccounts\MonetaryAccountProfileFill.cs" />
     <Compile Include="Model\NotificationFilters\NotificationFilterCategory.cs" />
