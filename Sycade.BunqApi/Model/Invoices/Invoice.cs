@@ -20,7 +20,7 @@ namespace Sycade.BunqApi.Model.Invoices
         [JsonProperty("status")]
         public string Status { get; set; }
 
-        [JsonProperty("groups")]
+        [JsonProperty("group")]
         public InvoiceGroup[] Groups { get; set; }
 
         [JsonProperty("total_vat_exclusive")]

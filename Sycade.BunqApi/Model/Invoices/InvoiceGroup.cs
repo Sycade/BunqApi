@@ -20,6 +20,6 @@ namespace Sycade.BunqApi.Model.Invoices
         public Amount ProductVatInclusive { get; set; }
 
         [JsonProperty("item")]
-        public InvoiceGroupItem Item { get; set; }
+        public InvoiceGroupItem[] Items { get; set; }
     }
 }
