@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Sycade.BunqApi</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <description>API client for the bunq public API.</description>
     <authors>Sycade B.V.</authors>
 
