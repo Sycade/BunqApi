@@ -9,7 +9,6 @@ Get the package from [nuget](https://www.nuget.org/packages/Sycade.BunqApi/) or 
 
 ## Example
 ### Create a new Installation and execute a payment
-
 ```csharp
 var rsaKeyPair = new RSACng(2048); // Generate a key pair or load one
 var useSandbox = true;
