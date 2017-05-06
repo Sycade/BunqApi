@@ -26,7 +26,7 @@ namespace Sycade.BunqApi.Endpoints
             return entities.Cast<MonetaryAccountBank>().ToArray();
         }
 
-        public async Task UpdatePropertyAsync<TProperty>(long monetaryAccountBankId, Expression<Func<MonetaryAccountBank, TProperty>> property, object value, Session session)
+        public async Task UpdatePropertyAsync<TProperty>(long monetaryAccountBankId, Expression<Func<MonetaryAccountBank, TProperty>> property, TProperty value, Session session)
         {
             await ApiClient.DoUpdatePropertyRequestAsync($"user/{session.User.Id}/monetary-account-bank/{monetaryAccountBankId}", property, value, session.Token);
         }

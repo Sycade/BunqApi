@@ -1,11 +1,12 @@
 ﻿using Sycade.BunqApi.Model;
 using Sycade.BunqApi.Model.Users;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sycade.BunqApi.Responses
 {
-    public class Session : BunqEntity
+    public class Session : BunqEntity, IDisposable
     {
         public Id Id { get; }
         public Token Token { get; }
@@ -22,6 +23,11 @@ namespace Sycade.BunqApi.Responses
         public async Task DeleteAsync()
         {
             await ApiClient.Sessions.DeleteAsync(this);
+        }
+
+        public void Dispose()
+        {
+            DeleteAsync().Wait();
         }
     }
 }
