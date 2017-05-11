@@ -8,15 +8,8 @@ namespace Sycade.BunqApi.Extensions
 {
     public static class RSAExtensions
     {
-        public static string ToPublicKeyPemString(this RSA rsa)
-        {
-            return ToPemString(DotNetUtilities.GetRsaPublicKey(rsa));
-        }
-
-        public static string ToPrivateKeyPemString(this RSA rsa)
-        {
-            return ToPemString(DotNetUtilities.GetRsaKeyPair(rsa));
-        }
+        public static string ToPublicKeyPemString(this RSA rsa) => ToPemString(DotNetUtilities.GetRsaPublicKey(rsa));
+        public static string ToPrivateKeyPemString(this RSA rsa) => ToPemString(DotNetUtilities.GetRsaKeyPair(rsa));
 
         public static RSA FromPublicKeyPemString(string pemString)
         {
