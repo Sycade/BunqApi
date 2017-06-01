@@ -1,5 +1,4 @@
 ﻿using Sycade.BunqApi.Model.Invoices;
-using Sycade.BunqApi.Responses;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -15,15 +14,19 @@ namespace Sycade.BunqApi.Endpoints
         }
 
 
-        public async Task<Invoice[]> GetAllAsync(Session session)
+        public async Task<Invoice[]> GetAllAsync()
         {
+            var session = ApiClient.Session;
+
             var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/invoice", session.Token);
 
             return entities.Cast<Invoice>().ToArray();
         }
 
-        public async Task<Stream> GetPdfContentAsync(long invoiceId, Session session)
+        public async Task<Stream> GetPdfContentAsync(long invoiceId)
         {
+            var session = ApiClient.Session;
+
             return await ApiClient.DoRawApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/invoice/{invoiceId}/pdf-content", session.Token);
         }
     }

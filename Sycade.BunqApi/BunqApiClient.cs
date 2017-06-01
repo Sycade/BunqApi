@@ -4,6 +4,7 @@ using Sycade.BunqApi.Exceptions;
 using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
 using Sycade.BunqApi.Requests;
+using Sycade.BunqApi.Responses;
 using Sycade.BunqApi.Utilities;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace Sycade.BunqApi
         private string _urlFormatString;
 
         public RSA ServerPublicKey { get; private set; }
+        internal Session Session { get; set; }
 
         public BunqApiClient(RSA clientPrivateKey, RSA serverPublicKey, bool useSandbox)
         {

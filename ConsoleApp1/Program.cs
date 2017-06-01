@@ -22,13 +22,13 @@ namespace ConsoleApp1
             var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
 
             var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
-            var session = await bunq.Sessions.CreateAsync("your-api-key", installation.Token);
+            await bunq.Sessions.StartAsync("your-api-key", installation.Token);
 
             // Get all bank accounts for the User
-            var accounts = await bunq.MonetaryAccountBanks.GetAllAsync(session);
+            var accounts = await bunq.MonetaryAccountBanks.GetAllAsync();
 
             // Pay 25 euros from the first account to the second
-            var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment", session);
+            var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment");
         }
 
         static async void ReloadDeviceServer()
@@ -41,8 +41,8 @@ namespace ConsoleApp1
             var useSandbox = true;
 
             var bunq = new BunqApiClient(rsaKeyPair, serverPublicKey, useSandbox);
+            await bunq.Sessions.StartAsync("your-api-key", installationToken);
 
-            var session = await bunq.Sessions.CreateAsync("your-api-key", installationToken);
             // ... Use your session
         }
     }
