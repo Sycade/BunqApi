@@ -35,7 +35,7 @@ namespace Sycade.BunqApi
         private string _urlFormatString;
 
         public RSA ServerPublicKey { get; private set; }
-        internal Session Session { get; set; }
+        public Session Session { get; internal set; }
 
         public BunqApiClient(RSA clientPrivateKey, RSA serverPublicKey, bool useSandbox)
         {
