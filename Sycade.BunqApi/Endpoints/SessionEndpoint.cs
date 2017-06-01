@@ -26,8 +26,10 @@ namespace Sycade.BunqApi.Endpoints
             await StartAsync(apiKey, new Token(installationToken));
         }
 
-        public async Task DeleteAsync(Session session)
+        public async Task StopAsync()
         {
+            var session = ApiClient.Session;
+
             await ApiClient.DoSignedApiRequestAsync(HttpMethod.Delete, $"session/{session.Id.Value}", session.Token);
         }
     }
