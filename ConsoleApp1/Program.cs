@@ -1,6 +1,7 @@
 ﻿using Sycade.BunqApi;
 using Sycade.BunqApi.Model;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace ConsoleApp1
@@ -13,22 +14,22 @@ namespace ConsoleApp1
 
         static async void CreateDeviceServer()
         {
-            var rsaKeyPair = new RSACng(2048); // Generate a key pair or load one
-            var useSandbox = true;
+var rsaKeyPair = new RSACng(2048); // Generate a key pair or load one
+var useSandbox = true;
 
-            var bunq = new BunqApiClient(rsaKeyPair, useSandbox);
+var bunq = new BunqApiClient(rsaKeyPair, useSandbox);
 
-            // Link your API key to this IP address
-            var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
+// Link your API key to this IP address
+var installation = await bunq.Installations.CreateAsync(rsaKeyPair);
 
-            var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
-            await bunq.Sessions.StartAsync("your-api-key", installation.Token);
+var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My First DeviceServer", installation.Token);
+await bunq.Sessions.StartAsync("your-api-key", installation.Token);
 
-            // Get all bank accounts for the User
-            var accounts = await bunq.MonetaryAccountBanks.GetAllAsync();
+// Get all bank accounts for the User
+var accounts = (await bunq.MonetaryAccountBanks.GetAllAsync()).ToArray();
 
-            // Pay 25 euros from the first account to the second
-            var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment");
+// Pay 25 euros from the first account to the second
+var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment");
         }
 
         static async void ReloadDeviceServer()

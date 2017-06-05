@@ -22,7 +22,7 @@ var deviceServer = await bunq.DeviceServers.CreateAsync("your-api-key", "My Firs
 await bunq.Sessions.StartAsync("your-api-key", installation.Token);
 
 // Get all bank accounts for the User
-var accounts = await bunq.MonetaryAccountBanks.GetAllAsync();
+var accounts = (await bunq.MonetaryAccountBanks.GetAllAsync()).ToArray();
 
 // Pay 25 euros from the first account to the second
 var paymentId = await accounts[0].CreatePaymentAsync(accounts[1], new Amount(Currency.EUR, 25m), "My First Payment");

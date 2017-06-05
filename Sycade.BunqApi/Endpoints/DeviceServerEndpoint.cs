@@ -15,7 +15,7 @@ namespace Sycade.BunqApi.Endpoints
         {
             var request = new CreateDeviceServerRequest(description, apiKey, permittedIps);
 
-            return await ApiClient.DoSignedApiRequestAsync<Id>(HttpMethod.Post, "device-server", installationToken, request);
+            return await ApiClient.DoSignedApiRequestSingleAsync<Id>(HttpMethod.Post, "device-server", installationToken, request);
         }
     }
 }

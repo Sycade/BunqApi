@@ -1,6 +1,6 @@
-﻿using Sycade.BunqApi.Model.MonetaryAccounts;
+﻿using Sycade.BunqApi.Collections;
+using Sycade.BunqApi.Model.MonetaryAccounts;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,16 +17,14 @@ namespace Sycade.BunqApi.Endpoints
         {
             var session = ApiClient.Session;
 
-            return await ApiClient.DoSignedApiRequestAsync<MonetaryAccountBank>(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank/{monetaryAccountBankId}", session.Token);
+            return await ApiClient.DoSignedApiRequestSingleAsync<MonetaryAccountBank>(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank/{monetaryAccountBankId}", session.Token);
         }
 
-        public async Task<MonetaryAccountBank[]> GetAllAsync()
+        public async Task<BunqCollection<MonetaryAccountBank>> GetAllAsync()
         {
             var session = ApiClient.Session;
 
-            var entities = await ApiClient.DoSignedApiRequestAsync(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank", session.Token);
-
-            return entities.Cast<MonetaryAccountBank>().ToArray();
+            return await ApiClient.DoSignedApiRequestAsync<MonetaryAccountBank>(HttpMethod.Get, $"user/{session.User.Id}/monetary-account-bank", session.Token);
         }
 
         public async Task UpdatePropertyAsync<TProperty>(long monetaryAccountBankId, Expression<Func<MonetaryAccountBank, TProperty>> property, TProperty value)

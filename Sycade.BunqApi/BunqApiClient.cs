@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Sycade.BunqApi.Collections;
 using Sycade.BunqApi.Exceptions;
 using Sycade.BunqApi.Extensions;
 using Sycade.BunqApi.Model;
@@ -65,9 +66,9 @@ namespace Sycade.BunqApi
 
             var responseMessage = await SendRequestMessageAsync(requestMessage);
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
-            var responseArray = ParseResponse(responseMessage, responseContent);
+            var responseArray = GetResponse(responseMessage, responseContent);
 
-            return GetEntities(responseArray, responseContent);
+            return GetEntities(responseArray);
         }
 
         internal async Task<BunqEntity[]> DoSignedApiRequestAsync(HttpMethod method, string endpoint, Token token, object request = null)
@@ -80,14 +81,38 @@ namespace Sycade.BunqApi
 
             var responseMessage = await SendRequestMessageAsync(requestMessage);
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
-            var responseArray = ParseResponse(responseMessage, responseContent);
+            var responseArray = GetResponse(responseMessage, responseContent);
 
             VerifyResponse(responseMessage, responseContent);
 
-            return GetEntities(responseArray, responseContent);
+            return GetEntities(responseArray);
         }
 
-        internal async Task<TEntity> DoSignedApiRequestAsync<TEntity>(HttpMethod method, string endpoint, Token token, object request = null)
+
+        internal async Task<BunqCollection<TEntity>> DoSignedApiRequestAsync<TEntity>(HttpMethod method, string endpoint, Token token, object request = null)
+            where TEntity : BunqEntity
+        {
+            if (ServerPublicKey == null)
+                throw new BunqApiException("Server public key was not set.");
+
+            if (method == HttpMethod.Get)
+                endpoint += "?count=50";
+
+            var requestContent = request != null ? JsonConvert.SerializeObject(request) : "";
+            var requestMessage = CreateSignedRequestMessage(method, endpoint, token, requestContent);
+
+            var responseMessage = await SendRequestMessageAsync(requestMessage);
+            var responseContent = await responseMessage.Content.ReadAsStringAsync();
+            var responseArray = GetResponse(responseMessage, responseContent);
+
+            VerifyResponse(responseMessage, responseContent);
+
+            var entities = GetEntities(responseArray);
+
+            return new BunqCollection<TEntity>(GetPagination(responseContent), entities);
+        }
+
+        internal async Task<TEntity> DoSignedApiRequestSingleAsync<TEntity>(HttpMethod method, string endpoint, Token token, object request = null)
         {
             var entities = await DoSignedApiRequestAsync(method, endpoint, token, request);
 
@@ -107,7 +132,8 @@ namespace Sycade.BunqApi
             return await responseMessage.Content.ReadAsStreamAsync();
         }
 
-        internal async Task<BunqEntity[]> DoUpdatePropertyRequestAsync<TObject, TProperty>(string endpoint, Expression<Func<TObject, TProperty>> property, object value, Token token)
+
+        internal async Task<TObject> DoUpdatePropertyRequestAsync<TObject, TProperty>(string endpoint, Expression<Func<TObject, TProperty>> property, object value, Token token)
         {
             var jsonPropAttr = ((MemberExpression)property.Body).Member.GetCustomAttribute<JsonPropertyAttribute>();
 
@@ -116,12 +142,7 @@ namespace Sycade.BunqApi
                 [jsonPropAttr.PropertyName] = value
             };
 
-            return await DoSignedApiRequestAsync(HttpMethod.Put, endpoint, token, updatedFields);
-        }
-
-        private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)
-        {
-            return await _httpClient.SendAsync(requestMessage);
+            return await DoSignedApiRequestSingleAsync<TObject>(HttpMethod.Put, endpoint, token, updatedFields);
         }
 
 
@@ -171,19 +192,29 @@ namespace Sycade.BunqApi
             requestMessage.Headers.Add(ClientSignatureHeaderName, Convert.ToBase64String(clientSignature));
         }
 
+        private async Task<HttpResponseMessage> SendRequestMessageAsync(HttpRequestMessage requestMessage)
+        {
+            return await _httpClient.SendAsync(requestMessage);
+        }
 
-        private JArray ParseResponse(HttpResponseMessage responseMessage, string responseContent)
+
+        private JArray GetResponse(HttpResponseMessage responseMessage, string responseContent)
         {
             var parsedObject = JObject.Parse(responseContent);
-            var responseArray = (JArray)((JProperty)parsedObject.First).Value;
 
             if (responseMessage.StatusCode != HttpStatusCode.OK)
             {
-                var error = responseArray.First.ToObject<Error>();
+                var error = parsedObject["Error"].ToObject<Error>();
                 throw new BunqApiException(error);
             }
 
-            return responseArray;
+            return parsedObject["Response"].Value<JArray>();
+        }
+
+        private Pagination GetPagination(string responseContent)
+        {
+            var parsedObject = JObject.Parse(responseContent);
+            return parsedObject["Pagination"].ToObject<Pagination>();
         }
 
         private void VerifyResponse(HttpResponseMessage responseMessage, string content)
@@ -210,11 +241,11 @@ namespace Sycade.BunqApi
                 throw new BunqApiException("Server sent an invalid response. Signature invalid.");
         }
 
-        private BunqEntity[] GetEntities(JArray responseArray, string content)
+        private BunqEntity[] GetEntities(JArray response)
         {
             var entities = new List<BunqEntity>();
 
-            foreach (var element in responseArray.Cast<JObject>())
+            foreach (var element in response.Cast<JObject>())
             {
                 var property = (JProperty)element.First;
                 var propertyValue = (JObject)property.Value;

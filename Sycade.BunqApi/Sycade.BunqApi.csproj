@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="BunqApiClient.cs" />
     <Compile Include="BunqApiClientEndpoints.cs" />
+    <Compile Include="Collections\BunqCollection.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\DecimalToStringConverter.cs" />
     <Compile Include="Endpoints\CardEndpoint.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Model\NotificationFilters\NotificationFilterCategory.cs" />
     <Compile Include="Model\NotificationFilters\NotificationFilterDeliveryMethod.cs" />
     <Compile Include="Model\NotificationFilters\NotificationUrl.cs" />
+    <Compile Include="Model\Pagination.cs" />
     <Compile Include="Model\Users\LabelUser.cs" />
     <Compile Include="Model\MonetaryAccounts\Limit.cs" />
     <Compile Include="Model\Cards\MagStripePermission.cs" />
